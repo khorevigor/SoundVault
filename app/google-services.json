@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "951472759464",
+    "project_id": "soundvault-7fa75",
+    "storage_bucket": "soundvault-7fa75.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:951472759464:android:640bced5ee651793e8989d",
+        "android_client_info": {
+          "package_name": "com.dsphoenix.soundvault"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "951472759464-a48j11gjkjr5gac9857b18j7q2c9tin6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDhtXmuq9Z85eIVBifnPA2-6JXx7YWIsT8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "951472759464-a48j11gjkjr5gac9857b18j7q2c9tin6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
