@@ -1,7 +1,8 @@
 plugins {
     id 'com.android.application'
-    id 'kotlin-android'
     id 'com.google.gms.google-services'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -30,6 +31,10 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+
+    buildFeatures {
+        dataBinding true
+    }
 }
 
 dependencies {
@@ -52,5 +57,5 @@ dependencies {
     // Firestore
     implementation 'com.google.firebase:firebase-firestore-ktx'
     // Cloud storage
-    implementation 'com.google.firebase:firebase-storage'
+    implementation 'com.google.firebase:firebase-storage-ktx'
 }
