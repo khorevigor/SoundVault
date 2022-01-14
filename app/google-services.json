@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "951472759464-p3515r5s078per3h115emfgct5tssmdr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dsphoenix.soundvault",
+            "certificate_hash": "9defa12f0bb2506bbd2a8e53f337309fcd140813"
+          }
+        },
+        {
           "client_id": "951472759464-a48j11gjkjr5gac9857b18j7q2c9tin6.apps.googleusercontent.com",
           "client_type": 3
         }
