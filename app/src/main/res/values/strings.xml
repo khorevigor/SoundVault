@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">SoundVault</string>
-    <string name="upload_file_filename_placeholder">Choose file to upload</string>
 
+    <string name="upload_file_filename_placeholder">Choose file to upload</string>
     <string name="description_placeholder">Description</string>
     <string name="upload_button">Upload</string>
+    <string name="sign_out_button">Sign out</string>
 </resources>
