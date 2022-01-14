@@ -5,4 +5,7 @@
     <string name="description_placeholder">Description</string>
     <string name="upload_button">Upload</string>
     <string name="sign_out_button">Sign out</string>
+    <string name="home_button">Home</string>
+    <string name="search_button">Search</string>
+    <string name="my_library_buttton">My library</string>
 </resources>
