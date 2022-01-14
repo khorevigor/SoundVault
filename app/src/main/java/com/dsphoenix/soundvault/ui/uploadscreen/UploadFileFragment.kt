@@ -27,7 +27,7 @@ class UploadFileFragment : Fragment() {
             viewModel.uri.value = uri
         }
 
-        viewModel.openFileButtonClick = { activityLauncher.launch("audio/mpeg")}
+        viewModel.openFileButtonClick = { activityLauncher.launch("audio/mpeg") }
 
         val binding = DataBindingUtil.inflate<UploadScreanFragmentLayoutBinding>(
             layoutInflater,
