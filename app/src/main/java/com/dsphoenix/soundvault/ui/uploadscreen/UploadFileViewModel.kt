@@ -34,7 +34,7 @@ class UploadFileViewModel(
             remotePath = "audio/${filename.value}"
         )
 
-        audioRepository.uploadFile(track)
+        audioRepository.uploadTrack(track)
     }
 
     fun onOpenFileButtonClick() {
