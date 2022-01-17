@@ -13,10 +13,12 @@ object FirebaseStorageService {
     fun uploadTrack(track: Track) {
         track.remotePath?.let {
             val storageRef = storage.reference.child(it)
-            storageRef.putFile(track.uri).addOnSuccessListener {
-                Log.d(TAG, "File uploaded")
-            }.addOnFailureListener { e ->
-                Log.d(TAG, "File uploading error", e)
+            track.uri?.let { it1 ->
+                storageRef.putFile(it1).addOnSuccessListener {
+                    Log.d(TAG, "File uploaded")
+                }.addOnFailureListener { e ->
+                    Log.d(TAG, "File uploading error", e)
+                }
             }
         }
     }
