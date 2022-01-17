@@ -22,7 +22,7 @@ class UploadFileViewModel(
         isValid = Transformations.switchMap(filename) {Transformations.map(uri) {uri.value != null && !filename.value.isNullOrEmpty()} }
     }
 
-    fun uploadButtonClick() {
+    fun onUploadButtonClick() {
         Log.d(TAG, "filename is ${filename.value}, description is ${description.value}")
         Log.d(TAG, "uri is ${uri.value}")
 

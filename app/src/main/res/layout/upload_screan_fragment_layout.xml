@@ -61,7 +61,7 @@
             android:layout_height="40dp"
             android:text="@string/upload_button"
             android:enabled="@{viewmodel.isValid()}"
-            android:onClick="@{()->viewmodel.uploadButtonClick()}"
+            android:onClick="@{()->viewmodel.onUploadButtonClick()}"
             android:layout_marginTop="20dp"
             app:layout_constraintStart_toStartOf="@id/et_file_description"
             app:layout_constraintEnd_toEndOf="@id/et_file_description"
