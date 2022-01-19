@@ -7,7 +7,7 @@ import com.google.firebase.storage.ktx.storage
 
 private const val TAG = "FirebaseStorageService"
 
-object FirebaseStorageService {
+class FirebaseStorageService {
     private val storage = Firebase.storage
 
     fun uploadTrack(track: Track) {
