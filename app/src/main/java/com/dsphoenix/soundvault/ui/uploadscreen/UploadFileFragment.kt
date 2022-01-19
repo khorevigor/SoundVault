@@ -7,24 +7,23 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import com.dsphoenix.soundvault.R
 import com.dsphoenix.soundvault.databinding.UploadScreanFragmentLayoutBinding
+import dagger.hilt.android.AndroidEntryPoint
 
 private const val TAG = "UploadFileFragment"
 
+@AndroidEntryPoint
 class UploadFileFragment : Fragment() {
-    private lateinit var viewModelFactory: UploadFileViewModelFactory
-    private lateinit var viewModel: UploadFileViewModel
+    private val viewModel: UploadFileViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        viewModelFactory = UploadFileViewModelFactory()
-        viewModel = ViewModelProvider(this, viewModelFactory).get(UploadFileViewModel::class.java)
-
         val activityLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) {uri ->
             viewModel.uri.value = uri
         }

@@ -1,4 +1,4 @@
-package com.dsphoenix.soundvault
+package com.dsphoenix.soundvault.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -7,6 +7,7 @@ import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE
 import androidx.fragment.app.commit
+import com.dsphoenix.soundvault.R
 import com.dsphoenix.soundvault.ui.homescreen.HomeFragment
 import com.dsphoenix.soundvault.ui.searchscreen.SearchFragment
 import com.dsphoenix.soundvault.ui.uploadscreen.UploadFileFragment
@@ -16,10 +17,12 @@ import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
 import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
+import dagger.hilt.android.AndroidEntryPoint
 
 private const val TAG = "MainActivity"
 private const val BACKSTACK_ROOT_FRAGMENT_TAG = "root_fragment"
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity(), NavigationController {
     lateinit var signOutButton: Button
 
