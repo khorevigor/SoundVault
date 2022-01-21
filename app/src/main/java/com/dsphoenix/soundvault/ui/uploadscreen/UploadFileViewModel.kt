@@ -18,14 +18,13 @@ class UploadFileViewModel @Inject constructor(
     val description = MutableLiveData<String>()
     val uri = MutableLiveData<Uri>()
     val isValid: LiveData<Boolean>
-    lateinit var openFileButtonClick: () -> Unit
 
     init {
         filename = Transformations.map(uri) {uri.value?.lastPathSegment} as MutableLiveData<String>
         isValid = Transformations.switchMap(filename) {Transformations.map(uri) {uri.value != null && !filename.value.isNullOrEmpty()} }
     }
 
-    fun onUploadButtonClick() {
+    fun uploadTrack(){
         Log.d(TAG, "filename is ${filename.value}, description is ${description.value}")
         Log.d(TAG, "uri is ${uri.value}")
 
@@ -37,9 +36,5 @@ class UploadFileViewModel @Inject constructor(
         )
 
         audioRepository.uploadTrack(track)
-    }
-
-    fun onOpenFileButtonClick() {
-        openFileButtonClick()
     }
 }
