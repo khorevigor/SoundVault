@@ -3,23 +3,31 @@ package com.dsphoenix.soundvault.utils.firebase
 import android.util.Log
 import com.dsphoenix.soundvault.data.model.Track
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.StorageException
 import com.google.firebase.storage.ktx.storage
+import kotlinx.coroutines.tasks.await
+import java.lang.IllegalStateException
 
 private const val TAG = "FirebaseStorageService"
 
 class FirebaseStorageService {
     private val storage = Firebase.storage
 
-    fun uploadTrack(track: Track) {
-        track.remotePath?.let {
-            val storageRef = storage.reference.child(it)
-            track.uri?.let { it1 ->
-                storageRef.putFile(it1).addOnSuccessListener {
-                    Log.d(TAG, "File uploaded")
-                }.addOnFailureListener { e ->
-                    Log.d(TAG, "File uploading error", e)
-                }
-            }
+    suspend fun uploadTrack(track: Track) {
+        try {
+            checkNotNull(track.remotePath)
+            checkNotNull(track.uri)
+
+            val storageRef = storage.reference.child(track.remotePath)
+            storageRef.putFile(track.uri).await()
+        }
+        catch (cause: IllegalStateException) {
+            Log.d(TAG, "remotePath and Uri should not be null")
+            Log.d(TAG, cause.toString())
+        }
+        catch (cause: StorageException) {
+            Log.d(TAG, "error uploading file:")
+            Log.d(TAG, cause.toString())
         }
     }
 }

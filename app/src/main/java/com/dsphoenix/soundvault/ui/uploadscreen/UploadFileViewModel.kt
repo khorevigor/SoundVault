@@ -6,6 +6,7 @@ import androidx.lifecycle.*
 import com.dsphoenix.soundvault.data.AudioRepository
 import com.dsphoenix.soundvault.data.model.Track
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 private const val TAG = "UploadFileViewModel"
@@ -35,6 +36,8 @@ class UploadFileViewModel @Inject constructor(
             remotePath = "audio/${filename.value}"
         )
 
-        audioRepository.uploadTrack(track)
+        viewModelScope.launch {
+            audioRepository.uploadTrack(track)
+        }
     }
 }
