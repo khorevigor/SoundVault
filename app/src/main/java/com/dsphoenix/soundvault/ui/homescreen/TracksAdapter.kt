@@ -42,7 +42,7 @@ class TracksAdapter : RecyclerView.Adapter<TracksAdapter.ViewHolder>() {
             if (track.description.isNullOrEmpty())
                 binding.tvDescription.visibility = View.GONE
             else
-                binding.tvDescription.text = track.name
+                binding.tvDescription.text = track.description
         }
     }
 }
