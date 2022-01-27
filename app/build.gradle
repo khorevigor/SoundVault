@@ -71,4 +71,11 @@ dependencies {
 
     // by viewModels()
     implementation "androidx.activity:activity-ktx:1.2.2"
+
+    // Task.await()
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.3.9"
+
+    // LiveData extensions
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.4.0"
+
 }
