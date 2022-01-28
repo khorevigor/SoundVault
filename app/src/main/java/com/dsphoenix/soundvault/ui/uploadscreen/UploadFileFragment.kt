@@ -14,7 +14,6 @@ import com.dsphoenix.soundvault.databinding.UploadScreanFragmentLayoutBinding
 private const val TAG = "UploadFileFragment"
 
 class UploadFileFragment : Fragment() {
-    private lateinit var viewModelFactory: UploadFileViewModelFactory
     private lateinit var viewModel: UploadFileViewModel
 
     override fun onCreateView(
@@ -22,8 +21,7 @@ class UploadFileFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        viewModelFactory = UploadFileViewModelFactory()
-        viewModel = ViewModelProvider(this, viewModelFactory).get(UploadFileViewModel::class.java)
+        viewModel = ViewModelProvider(this, UploadFileViewModelFactory()).get(UploadFileViewModel::class.java)
 
         val activityLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) {uri ->
             viewModel.uri.value = uri
