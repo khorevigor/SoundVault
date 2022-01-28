@@ -10,8 +10,7 @@ private const val TAG = "UploadFileViewModel"
 
 class UploadFileViewModel(
     private val audioRepository: AudioRepository
-)
-    : ViewModel() {
+) : ViewModel() {
     var filename = MutableLiveData<String>()
     val description = MutableLiveData<String>()
     val uri = MutableLiveData<Uri>()
