@@ -15,10 +15,10 @@ class FirebaseStorageService {
 
     suspend fun uploadTrack(track: Track) {
         try {
-            checkNotNull(track.remotePath)
+            checkNotNull(track.path)
             checkNotNull(track.uri)
 
-            val storageRef = storage.reference.child(track.remotePath)
+            val storageRef = storage.reference.child(track.path)
             storageRef.putFile(track.uri).await()
         }
         catch (cause: IllegalStateException) {

@@ -6,5 +6,5 @@ data class Track (
     val name: String? = null,
     val description: String? = null,
     val uri: Uri? = null,
-    val remotePath: String? = null
+    val path: String? = null
     )

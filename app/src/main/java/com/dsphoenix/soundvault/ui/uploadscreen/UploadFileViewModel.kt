@@ -33,7 +33,7 @@ class UploadFileViewModel @Inject constructor(
             name = filename.value ?: "",
             description = description.value ?: "",
             uri = uri.value ?: Uri.EMPTY,
-            remotePath = "audio/${filename.value}"
+            path = "audio/${filename.value}"
         )
 
         viewModelScope.launch {
