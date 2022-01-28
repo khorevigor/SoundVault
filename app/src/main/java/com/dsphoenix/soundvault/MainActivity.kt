@@ -33,8 +33,9 @@ class MainActivity : AppCompatActivity(), NavigationController {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        if (savedInstanceState == null)
+        if (savedInstanceState == null) {
             startSignInFlow()
+        }
 
         signOutButton = findViewById(R.id.sign_out_button)
         signOutButton.setOnClickListener { signOutActiveUser() }
@@ -70,15 +71,21 @@ class MainActivity : AppCompatActivity(), NavigationController {
 
     private fun onSignInResult(result: FirebaseAuthUIAuthenticationResult) {
         val response = result.idpResponse
-        response?.let {
-            if (result.resultCode == RESULT_OK) {
-                val user = FirebaseAuth.getInstance().currentUser
-                Log.d(TAG, "User authenticated successfully, $user")
-                navigateToHomeScreen()
+
+        if (result.resultCode == RESULT_OK) {
+            val user = FirebaseAuth.getInstance().currentUser
+            Log.d(TAG, "User authenticated successfully, $user")
+            navigateToUploadScreen()
+        }
+        else {
+            if (response == null) {
+                Log.d(TAG, "User cancelled sign-in flow")
+                moveTaskToBack(true)
+                finishApplication()
             } else {
                 Log.d(TAG, "Authentication error, ${response.error?.errorCode}")
             }
-        } ?: Log.d(TAG, "User cancelled sign-in flow")
+        }
     }
 
     private fun signOutActiveUser() {
@@ -88,6 +95,11 @@ class MainActivity : AppCompatActivity(), NavigationController {
                 Log.d(TAG, "User signed out")
             }
         startSignInFlow()
+    }
+
+    private fun finishApplication() {
+        moveTaskToBack(true)
+        finish()
     }
 
     private fun navigateToUploadScreen() {
