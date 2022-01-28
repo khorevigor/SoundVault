@@ -5,7 +5,9 @@ import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
+import com.dsphoenix.soundvault.R
 import com.dsphoenix.soundvault.databinding.UploadScreenFragmentLayoutBinding
+import com.dsphoenix.soundvault.utils.constants.DistributionPlan
 import com.dsphoenix.soundvault.utils.viewbinding.ViewBindingFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -40,6 +42,13 @@ class UploadFileFragment: ViewBindingFragment<UploadScreenFragmentLayoutBinding>
         }
         binding.etFileDescription.doAfterTextChanged {
             viewModel.description.value = it.toString()
+        }
+
+        binding.rgDistributionPlan.setOnCheckedChangeListener { _, optionId ->
+            when (optionId) {
+                R.id.rb_free_for_all -> viewModel.distributionPlan.value = DistributionPlan.FREE_FOR_ALL
+                R.id.rb_subscription -> viewModel.distributionPlan.value = DistributionPlan.SUBSCRIPTION
+            }
         }
     }
 

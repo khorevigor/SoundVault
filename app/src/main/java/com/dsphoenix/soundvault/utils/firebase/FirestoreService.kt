@@ -17,13 +17,15 @@ class FirestoreService {
 
     suspend fun writeTrack(track: Track): Track {
         val remotePath = "audio/${track.name}"
+        val updatedTrack: Track = track.copy(path = remotePath)
+
         val item = hashMapOf(
             DbConstants.TRACK_NAME_FIELD to track.name,
             DbConstants.TRACK_DESCRIPTION_FIELD to track.description,
-            DbConstants.TRACK_PATH to remotePath
+            DbConstants.TRACK_PATH to track.path,
+            DbConstants.TRACK_DISTRIBUTION_PLAN_FIELD to track.distributionPlan
         )
 
-        val updatedTrack: Track = track.copy(path = remotePath)
         try {
             db.collection(DbConstants.TRACK_COLLECTION).add(item).await()
         } catch (cause: FirebaseFirestoreException) {

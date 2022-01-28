@@ -5,4 +5,5 @@ object DbConstants {
     const val TRACK_NAME_FIELD = "name"
     const val TRACK_DESCRIPTION_FIELD = "description"
     const val TRACK_PATH = "path"
+    const val TRACK_DISTRIBUTION_PLAN_FIELD = "distributionPlan"
 }
