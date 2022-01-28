@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE
 import androidx.fragment.app.commit
 import com.dsphoenix.soundvault.ui.homescreen.HomeFragment
 import com.dsphoenix.soundvault.ui.searchscreen.SearchFragment
@@ -103,17 +102,17 @@ class MainActivity : AppCompatActivity(), NavigationController {
     }
 
     private fun navigateToUploadScreen() {
-        popBackStack(BACKSTACK_ROOT_FRAGMENT_TAG, POP_BACK_STACK_INCLUSIVE)
+        popBackStack()
         replaceFragment(UploadFileFragment(), backStackTag = BACKSTACK_ROOT_FRAGMENT_TAG)
     }
 
     private fun navigateToHomeScreen() {
-        popBackStack(BACKSTACK_ROOT_FRAGMENT_TAG, POP_BACK_STACK_INCLUSIVE)
+        popBackStack()
         replaceFragment(HomeFragment(), tag = HomeFragment.navigationTag, backStackTag = BACKSTACK_ROOT_FRAGMENT_TAG)
     }
 
     private fun navigateToSearchScreen() {
-        popBackStack(BACKSTACK_ROOT_FRAGMENT_TAG, POP_BACK_STACK_INCLUSIVE)
+        popBackStack()
         replaceFragment(SearchFragment(), backStackTag = BACKSTACK_ROOT_FRAGMENT_TAG)
     }
 
