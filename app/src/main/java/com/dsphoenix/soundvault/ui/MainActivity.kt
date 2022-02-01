@@ -78,7 +78,7 @@ class MainActivity : AppCompatActivity(), NavigationController {
         if (result.resultCode == RESULT_OK) {
             val user = FirebaseAuth.getInstance().currentUser
             Log.d(TAG, "User authenticated successfully, $user")
-            navigateToUploadScreen()
+            navigateToHomeScreen()
         }
         else {
             if (response == null) {
