@@ -3,14 +3,12 @@ package com.dsphoenix.soundvault.ui.homescreen
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
-import com.dsphoenix.soundvault.databinding.HomeScreenFragmentLayoutBinding
+import com.dsphoenix.soundvault.databinding.HomeScreenFragmentBinding
 import com.dsphoenix.soundvault.utils.viewbinding.ViewBindingFragment
 import dagger.hilt.android.AndroidEntryPoint
 
-private const val TAG = "HomeFragment"
-
 @AndroidEntryPoint
-class HomeFragment : ViewBindingFragment<HomeScreenFragmentLayoutBinding>(HomeScreenFragmentLayoutBinding::inflate) {
+class HomeFragment : ViewBindingFragment<HomeScreenFragmentBinding>(HomeScreenFragmentBinding::inflate) {
 
     private val viewModel: HomeViewModel by viewModels()
 

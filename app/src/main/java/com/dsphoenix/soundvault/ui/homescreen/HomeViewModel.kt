@@ -11,8 +11,6 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-private const val TAG = "HomeViewModel"
-
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     audioRepository: AudioRepository,

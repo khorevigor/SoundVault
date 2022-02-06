@@ -11,6 +11,7 @@ import com.dsphoenix.soundvault.R
 import com.dsphoenix.soundvault.ui.homescreen.HomeFragment
 import com.dsphoenix.soundvault.ui.searchscreen.SearchFragment
 import com.dsphoenix.soundvault.ui.uploadscreen.UploadFileFragment
+import com.dsphoenix.soundvault.utils.TAG
 import com.dsphoenix.soundvault.utils.navigation.NavigationController
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
@@ -19,8 +20,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 
-private const val TAG = "MainActivity"
-private const val BACKSTACK_ROOT_FRAGMENT_TAG = "root_fragmentxmlns:app=\"http://schemas.android.com/apk/res-auto\""
+private const val BACKSTACK_ROOT_FRAGMENT_TAG = "root_fragment"
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(), NavigationController {

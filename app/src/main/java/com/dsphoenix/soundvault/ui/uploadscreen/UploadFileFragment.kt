@@ -6,15 +6,13 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
 import com.dsphoenix.soundvault.R
-import com.dsphoenix.soundvault.databinding.UploadScreenFragmentLayoutBinding
+import com.dsphoenix.soundvault.databinding.UploadScreenFragmentBinding
 import com.dsphoenix.soundvault.utils.constants.DistributionPlan
 import com.dsphoenix.soundvault.utils.viewbinding.ViewBindingFragment
 import dagger.hilt.android.AndroidEntryPoint
 
-private const val TAG = "UploadFileFragment"
-
 @AndroidEntryPoint
-class UploadFileFragment: ViewBindingFragment<UploadScreenFragmentLayoutBinding>(UploadScreenFragmentLayoutBinding::inflate) {
+class UploadFileFragment: ViewBindingFragment<UploadScreenFragmentBinding>(UploadScreenFragmentBinding::inflate) {
     private val viewModel: UploadFileViewModel by viewModels()
 
     private val activityLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) {uri ->

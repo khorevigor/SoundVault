@@ -27,7 +27,7 @@
         app:layout_constraintTop_toBottomOf="@id/tv_home_label"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:orientation="vertical"
-        tools:listitem="@layout/vh_track_layout"
+        tools:listitem="@layout/vh_track"
         />
 
     <Button

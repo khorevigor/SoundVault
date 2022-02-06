@@ -2,13 +2,12 @@ package com.dsphoenix.soundvault.utils.firebase
 
 import android.util.Log
 import com.dsphoenix.soundvault.data.model.Track
+import com.dsphoenix.soundvault.utils.TAG
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageException
 import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.tasks.await
 import java.lang.IllegalStateException
-
-private const val TAG = "FirebaseStorageService"
 
 class FirebaseStorageService {
     private val storage = Firebase.storage

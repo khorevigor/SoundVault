@@ -5,12 +5,11 @@ import android.util.Log
 import androidx.lifecycle.*
 import com.dsphoenix.soundvault.data.AudioRepository
 import com.dsphoenix.soundvault.data.model.Track
+import com.dsphoenix.soundvault.utils.TAG
 import com.dsphoenix.soundvault.utils.constants.DistributionPlan
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
-private const val TAG = "UploadFileViewModel"
 
 @HiltViewModel
 class UploadFileViewModel @Inject constructor(

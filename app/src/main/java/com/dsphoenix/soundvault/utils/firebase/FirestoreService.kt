@@ -3,6 +3,7 @@ package com.dsphoenix.soundvault.utils.firebase
 import android.util.Log
 import com.dsphoenix.soundvault.data.model.Track
 import com.dsphoenix.soundvault.data.model.User
+import com.dsphoenix.soundvault.utils.TAG
 import com.dsphoenix.soundvault.utils.constants.DbConstants
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
@@ -10,8 +11,6 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.toObject
 import kotlinx.coroutines.tasks.await
 import java.lang.IllegalStateException
-
-private const val TAG = "FirestoreService"
 
 class FirestoreService {
     private val db = FirebaseFirestore.getInstance()

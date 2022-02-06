@@ -3,12 +3,10 @@ package com.dsphoenix.soundvault.ui.homescreen
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.dsphoenix.soundvault.R
 import com.dsphoenix.soundvault.data.model.Track
-import com.dsphoenix.soundvault.databinding.VhTrackLayoutBinding
+import com.dsphoenix.soundvault.databinding.VhTrackBinding
 
 class TracksAdapter : RecyclerView.Adapter<TracksAdapter.ViewHolder>() {
 
@@ -18,7 +16,7 @@ class TracksAdapter : RecyclerView.Adapter<TracksAdapter.ViewHolder>() {
     override fun getItemCount() = items.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = VhTrackLayoutBinding.inflate(
+        val binding = VhTrackBinding.inflate(
             LayoutInflater.from(parent.context)
         )
 
@@ -35,7 +33,7 @@ class TracksAdapter : RecyclerView.Adapter<TracksAdapter.ViewHolder>() {
         items = newItems
     }
 
-    class ViewHolder(private val binding: VhTrackLayoutBinding): RecyclerView.ViewHolder(binding.root) {
+    class ViewHolder(private val binding: VhTrackBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(track: Track) {
             binding.tvName.text = track.name
 
