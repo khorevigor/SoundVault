@@ -51,7 +51,7 @@ class FirestoreService {
         return user
     }
 
-    private suspend fun writeUser(user: User) {
+    suspend fun writeUser(user: User) {
         try {
             checkNotNull(user.uid)
             db.collection(DbConstants.USERS_COLLECTION).document(user.uid).set(user).await()

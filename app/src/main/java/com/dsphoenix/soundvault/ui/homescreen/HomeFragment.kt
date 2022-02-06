@@ -25,6 +25,11 @@ class HomeFragment : ViewBindingFragment<HomeScreenFragmentLayoutBinding>(HomeSc
         viewModel.tracks.observe(viewLifecycleOwner) { tracks ->
             (binding.rvTracks.adapter as TracksAdapter).setData(tracks)
         }
+        binding.subButton.setOnClickListener { viewModel.toggleSubscription() }
+        viewModel.user.observe(viewLifecycleOwner) { user ->
+            binding.subButton.text =
+                if (user.hasSubscription == true) "Unsubscribe" else "Subscribe"
+        }
     }
 
     companion object {

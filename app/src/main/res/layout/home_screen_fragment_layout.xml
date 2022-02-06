@@ -30,4 +30,14 @@
         tools:listitem="@layout/vh_track_layout"
         />
 
+    <Button
+        android:id="@+id/sub_button"
+        android:layout_height="40dp"
+        android:layout_width="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="20dp"
+        tools:text="Subscribe"
+        />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
