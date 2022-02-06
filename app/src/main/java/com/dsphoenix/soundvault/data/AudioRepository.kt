@@ -1,6 +1,8 @@
 package com.dsphoenix.soundvault.data
 
 import com.dsphoenix.soundvault.data.model.Track
+import com.dsphoenix.soundvault.utils.constants.DbConstants
+import com.dsphoenix.soundvault.utils.constants.DistributionPlan
 import com.dsphoenix.soundvault.utils.firebase.FirebaseStorageService
 import com.dsphoenix.soundvault.utils.firebase.FirestoreService
 import kotlinx.coroutines.flow.Flow
@@ -16,6 +18,15 @@ class AudioRepository @Inject constructor(
         firebaseStorage.uploadTrack(updatedTrack)
     }
 
-    fun getTracks(): Flow<List<Track>> =
-        firestoreService.getTracks()
+    fun getTracks(queryParams: Map<String, String>? = null): Flow<List<Track>> = flow {
+        val query = queryParams?.toMutableMap() ?: mutableMapOf()
+        if (!isSubscriptionEnabled) {
+            query[DbConstants.TRACK_DISTRIBUTION_PLAN_FIELD] = DistributionPlan.FREE_FOR_ALL.toString()
+        }
+        emit(firestoreService.getTracksQuery(query))
+    }
+
+    companion object {
+        var isSubscriptionEnabled = false
+    }
 }

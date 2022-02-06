@@ -24,6 +24,7 @@ private const val BACKSTACK_ROOT_FRAGMENT_TAG = "root_fragmentxmlns:app=\"http:/
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(), NavigationController {
     lateinit var signOutButton: Button
+    lateinit var currentUserUid: String
 
     private val signInLauncher = registerForActivityResult(
         FirebaseAuthUIActivityResultContract()
@@ -76,8 +77,8 @@ class MainActivity : AppCompatActivity(), NavigationController {
         val response = result.idpResponse
 
         if (result.resultCode == RESULT_OK) {
-            val user = FirebaseAuth.getInstance().currentUser
-            Log.d(TAG, "User authenticated successfully, $user")
+            currentUserUid = FirebaseAuth.getInstance().currentUser?.uid.toString()
+            Log.d(TAG, "User with UID $currentUserUid authenticated successfully")
             navigateToHomeScreen()
         }
         else {
@@ -112,7 +113,7 @@ class MainActivity : AppCompatActivity(), NavigationController {
 
     private fun navigateToHomeScreen() {
         popBackStack()
-        replaceFragment(HomeFragment(), tag = HomeFragment.navigationTag, backStackTag = BACKSTACK_ROOT_FRAGMENT_TAG)
+        replaceFragment(HomeFragment.newInstance(currentUserUid), tag = HomeFragment.navigationTag, backStackTag = BACKSTACK_ROOT_FRAGMENT_TAG)
     }
 
     private fun navigateToSearchScreen() {
