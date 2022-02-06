@@ -12,7 +12,7 @@
         />
     <item
         android:id="@+id/navigation_library"
-        android:title="@string/my_library_buttton"
+        android:title="@string/my_library_button"
         android:icon="@drawable/ic_library"
         />
 </menu>

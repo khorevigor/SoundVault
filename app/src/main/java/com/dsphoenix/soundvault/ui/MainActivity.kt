@@ -3,7 +3,8 @@ package com.dsphoenix.soundvault.ui
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.Button
+import android.view.Menu
+import android.view.MenuItem
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import com.dsphoenix.soundvault.R
@@ -23,8 +24,6 @@ private const val BACKSTACK_ROOT_FRAGMENT_TAG = "root_fragmentxmlns:app=\"http:/
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(), NavigationController {
-    lateinit var signOutButton: Button
-
     private val signInLauncher = registerForActivityResult(
         FirebaseAuthUIActivityResultContract()
     ) { res ->
@@ -35,15 +34,26 @@ class MainActivity : AppCompatActivity(), NavigationController {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
         if (savedInstanceState == null) {
             startSignInFlow()
         }
 
-        signOutButton = findViewById(R.id.sign_out_button)
-        signOutButton.setOnClickListener { signOutActiveUser() }
-
         initializeNavigationBar()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main_activity_options, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.sign_out_option -> {
+                signOutActiveUser()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     private fun initializeNavigationBar() {

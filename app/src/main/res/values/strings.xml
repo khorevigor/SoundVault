@@ -4,10 +4,11 @@
     <string name="upload_file_filename_placeholder">Choose file to upload</string>
     <string name="description_placeholder">Description</string>
     <string name="upload_button">Upload</string>
-    <string name="sign_out_button">Sign out</string>
     <string name="home_button">Home</string>
     <string name="search_button">Search</string>
-    <string name="my_library_buttton">My library</string>
+    <string name="my_library_button">My library</string>
     <string name="free_for_all_rbutton">Free for all</string>
     <string name="subscription_rbutton">Subscription</string>
+    <string name="sign_out_option">Sign out</string>
+    <string name="search_option">Search</string>
 </resources>
