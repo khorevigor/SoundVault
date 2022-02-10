@@ -43,15 +43,37 @@
         app:layout_constraintEnd_toEndOf="@id/et_file_name"
         />
 
+    <RadioGroup
+        android:id="@+id/rg_distribution_plan"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/et_file_description"
+        app:layout_constraintStart_toStartOf="@id/et_file_description"
+        app:layout_constraintEnd_toEndOf="@id/et_file_description"
+        >
+        <RadioButton
+            android:id="@+id/rb_free_for_all"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/free_for_all_rbutton"
+            />
+        <RadioButton
+            android:id="@+id/rb_subscription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/subscription_rbutton"
+            />
+    </RadioGroup>
+
     <Button
         android:id="@+id/btn_upload"
         android:layout_width="100dp"
         android:layout_height="40dp"
         android:text="@string/upload_button"
         android:layout_marginTop="20dp"
-        app:layout_constraintStart_toStartOf="@id/et_file_description"
-        app:layout_constraintEnd_toEndOf="@id/et_file_description"
-        app:layout_constraintTop_toBottomOf="@id/et_file_description"
+        app:layout_constraintStart_toStartOf="@id/rg_distribution_plan"
+        app:layout_constraintEnd_toEndOf="@id/rg_distribution_plan"
+        app:layout_constraintTop_toBottomOf="@id/rg_distribution_plan"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
