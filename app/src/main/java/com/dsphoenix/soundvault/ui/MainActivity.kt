@@ -23,10 +23,7 @@ private const val BACKSTACK_ROOT_FRAGMENT_TAG = "root_fragmentxmlns:app=\"http:/
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(), NavigationController {
-    private val UID_KEY = "UID_KEY"
-
     lateinit var signOutButton: Button
-    lateinit var currentUserUid: String
 
     private val signInLauncher = registerForActivityResult(
         FirebaseAuthUIActivityResultContract()
@@ -47,18 +44,6 @@ class MainActivity : AppCompatActivity(), NavigationController {
         signOutButton.setOnClickListener { signOutActiveUser() }
 
         initializeNavigationBar()
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        outState.putString(UID_KEY, currentUserUid)
-
-        super.onSaveInstanceState(outState)
-    }
-
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        currentUserUid = savedInstanceState.getString(UID_KEY) ?: ""
-
-        super.onRestoreInstanceState(savedInstanceState)
     }
 
     private fun initializeNavigationBar() {
@@ -91,7 +76,7 @@ class MainActivity : AppCompatActivity(), NavigationController {
         val response = result.idpResponse
 
         if (result.resultCode == RESULT_OK) {
-            currentUserUid = FirebaseAuth.getInstance().currentUser?.uid.toString()
+            val currentUserUid = FirebaseAuth.getInstance().currentUser?.uid.toString()
             Log.d(TAG, "User with UID $currentUserUid authenticated successfully")
             navigateToHomeScreen()
         }
@@ -127,7 +112,7 @@ class MainActivity : AppCompatActivity(), NavigationController {
 
     private fun navigateToHomeScreen() {
         popBackStack()
-        replaceFragment(HomeFragment.newInstance(currentUserUid), tag = HomeFragment.navigationTag, backStackTag = BACKSTACK_ROOT_FRAGMENT_TAG)
+        replaceFragment(HomeFragment(), tag = HomeFragment.navigationTag, backStackTag = BACKSTACK_ROOT_FRAGMENT_TAG)
     }
 
     private fun navigateToSearchScreen() {

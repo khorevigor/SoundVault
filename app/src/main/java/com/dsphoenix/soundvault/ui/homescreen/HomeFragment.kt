@@ -19,8 +19,6 @@ class HomeFragment : ViewBindingFragment<HomeScreenFragmentLayoutBinding>(HomeSc
     }
 
     private fun setupView() {
-        val uid = arguments?.getString(UID_KEY)
-        uid?.let { viewModel.uid.value = it }
         binding.rvTracks.adapter = TracksAdapter()
         viewModel.tracks.observe(viewLifecycleOwner) { tracks ->
             (binding.rvTracks.adapter as TracksAdapter).setData(tracks)
@@ -34,13 +32,5 @@ class HomeFragment : ViewBindingFragment<HomeScreenFragmentLayoutBinding>(HomeSc
 
     companion object {
         const val navigationTag = "HomeFragment"
-        private const val UID_KEY = "HOME_FRAGMENT_UID"
-
-        fun newInstance(uid: String): HomeFragment =
-            HomeFragment().apply {
-                arguments = Bundle().apply {
-                    putString(UID_KEY, uid)
-                }
-            }
     }
 }
