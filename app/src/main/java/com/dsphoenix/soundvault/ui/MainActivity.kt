@@ -23,6 +23,8 @@ private const val BACKSTACK_ROOT_FRAGMENT_TAG = "root_fragmentxmlns:app=\"http:/
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(), NavigationController {
+    private val UID_KEY = "UID_KEY"
+
     lateinit var signOutButton: Button
     lateinit var currentUserUid: String
 
@@ -45,6 +47,18 @@ class MainActivity : AppCompatActivity(), NavigationController {
         signOutButton.setOnClickListener { signOutActiveUser() }
 
         initializeNavigationBar()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putString(UID_KEY, currentUserUid)
+
+        super.onSaveInstanceState(outState)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        currentUserUid = savedInstanceState.getString(UID_KEY) ?: ""
+
+        super.onRestoreInstanceState(savedInstanceState)
     }
 
     private fun initializeNavigationBar() {
