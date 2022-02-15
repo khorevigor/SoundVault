@@ -12,6 +12,7 @@ import com.dsphoenix.soundvault.R
 import com.dsphoenix.soundvault.databinding.ActivityMainBinding
 import com.dsphoenix.soundvault.ui.homescreen.HomeFragment
 import com.dsphoenix.soundvault.ui.searchscreen.SearchFragment
+import com.dsphoenix.soundvault.ui.trackdetails.TrackDetailsFragment
 import com.dsphoenix.soundvault.ui.uploadscreen.UploadFileFragment
 import com.dsphoenix.soundvault.ui.userscreen.UserProfileFragment
 import com.dsphoenix.soundvault.utils.TAG
@@ -67,6 +68,10 @@ class MainActivity : AppCompatActivity(), NavigationController {
             }
             R.id.profile_option-> {
                 navigateToUserProfile()
+                true
+            }
+            R.id.track_details_option-> {
+                navigateToTrackDetails()
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -154,6 +159,12 @@ class MainActivity : AppCompatActivity(), NavigationController {
         hideToolbarAndNavbar()
         popBackStack()
         replaceFragment(UserProfileFragment(), backStackTag = BACKSTACK_ROOT_FRAGMENT_TAG)
+    }
+
+    private fun navigateToTrackDetails() {
+        hideToolbarAndNavbar()
+        popBackStack()
+        replaceFragment(TrackDetailsFragment(), backStackTag = BACKSTACK_ROOT_FRAGMENT_TAG)
     }
 
     private fun hideToolbarAndNavbar() {
