@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:paddingStart="24dp"
+    android:paddingEnd="24dp"
+    >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+        <TextView
+            android:id="@+id/back_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/gray"
+            android:text="@string/back_button"
+            app:drawableStartCompat="@drawable/ic_back"
+            android:drawablePadding="12dp"
+            android:layout_marginTop="25dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <TextView
+            android:id="@+id/share_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/gray"
+            android:text="@string/share_button"
+            app:drawableEndCompat="@drawable/ic_share"
+            android:drawablePadding="12dp"
+            android:layout_marginTop="25dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <ImageView
+            android:id="@+id/iv_track_cover"
+            android:layout_width="0dp"
+            android:layout_height="300dp"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="70dp"
+            android:src="@drawable/cover"
+            />
+
+        <TextView
+            android:id="@+id/tv_track_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/light_gray"
+            android:textSize="24sp"
+            android:fontFamily="sans-serif-medium"
+            android:layout_marginTop="10dp"
+            app:layout_constraintTop_toBottomOf="@id/iv_track_cover"
+            app:layout_constraintStart_toStartOf="@id/iv_track_cover"
+            app:layout_constraintEnd_toEndOf="@id/iv_track_cover"
+            android:text="@string/kings_and_wretches"
+            />
+
+        <TextView
+            android:id="@+id/tv_author_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/light_gray"
+            android:textSize="16sp"
+            android:fontFamily="sans-serif-medium"
+            app:layout_constraintTop_toBottomOf="@id/tv_track_name"
+            app:layout_constraintStart_toStartOf="@id/tv_track_name"
+            app:layout_constraintEnd_toEndOf="@id/tv_track_name"
+            android:text="@string/parkin_link"
+            />
+
+        <TextView
+            android:id="@+id/tv_likes_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/likes_label"
+            android:layout_marginTop="30dp"
+            android:fontFamily="sans-serif-black"
+            android:textColor="@color/light_gray"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintTop_toBottomOf="@id/tv_author_name"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/iv_like"
+            />
+
+        <TextView
+            android:id="@+id/tv_tracks_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="420"
+            android:textColor="@color/light_gray"
+            app:layout_constraintTop_toBottomOf="@id/tv_likes_label"
+            app:layout_constraintStart_toStartOf="@id/tv_likes_label"
+            app:layout_constraintEnd_toEndOf="@id/tv_likes_label"
+            />
+
+        <ImageView
+            android:id="@+id/iv_like"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-black"
+            android:src="@drawable/ic_like"
+            app:layout_constraintTop_toTopOf="@id/tv_likes_label"
+            app:layout_constraintStart_toEndOf="@id/tv_likes_label"
+            app:layout_constraintEnd_toStartOf="@id/tv_plays_label"
+            />
+
+        <TextView
+            android:id="@+id/tv_plays_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/plays_label"
+            android:fontFamily="sans-serif-black"
+            android:textColor="@color/light_gray"
+            app:layout_constraintTop_toTopOf="@id/iv_like"
+            app:layout_constraintStart_toEndOf="@id/iv_like"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+
+        <TextView
+            android:id="@+id/tv_plays_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="7548"
+            android:textColor="@color/light_gray"
+            app:layout_constraintTop_toBottomOf="@id/tv_plays_label"
+            app:layout_constraintStart_toStartOf="@id/tv_plays_label"
+            app:layout_constraintEnd_toEndOf="@id/tv_plays_label"
+            />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            app:layout_constraintTop_toBottomOf="@id/iv_like"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+
+        <TextView
+            android:id="@+id/tv_duration_current"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0:00"
+            android:textColor="@color/light_gray"
+            app:layout_constraintTop_toBottomOf="@id/progressBar"
+            app:layout_constraintStart_toStartOf="@id/progressBar"
+            />
+
+        <TextView
+            android:id="@+id/tv_duration_total"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/light_gray"
+            app:layout_constraintTop_toBottomOf="@id/progressBar"
+            app:layout_constraintEnd_toEndOf="@id/progressBar"
+            android:text="4:20"
+            />
+
+        <ImageButton
+            android:id="@+id/ib_shuffle_button"
+            android:layout_width="0dp"
+            android:layout_height="20dp"
+            app:layout_constraintDimensionRatio="1:1"
+            android:background="@drawable/ic_shuffle"
+            app:layout_constraintTop_toTopOf="@id/ib_previous_button"
+            app:layout_constraintBottom_toBottomOf="@id/ib_previous_button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/ib_previous_button"
+            />
+
+        <ImageButton
+            android:id="@+id/ib_previous_button"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            app:layout_constraintDimensionRatio="1:1"
+            android:background="@drawable/ic_previous"
+            app:layout_constraintTop_toTopOf="@id/ib_play_button"
+            app:layout_constraintBottom_toBottomOf="@id/ib_play_button"
+            app:layout_constraintStart_toEndOf="@id/ib_shuffle_button"
+            app:layout_constraintEnd_toStartOf="@id/ib_play_button"
+            />
+
+        <ImageButton
+            android:id="@+id/ib_play_button"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            app:layout_constraintDimensionRatio="1:1"
+            android:backgroundTint="@color/light_gray"
+            android:background="@drawable/circle_background"
+            android:src="@drawable/ic_play"
+            android:layout_marginTop="28dp"
+            app:layout_constraintTop_toBottomOf="@id/progressBar"
+            app:layout_constraintStart_toEndOf="@id/ib_previous_button"
+            app:layout_constraintEnd_toStartOf="@id/ib_next_button"
+            />
+
+        <ImageButton
+            android:id="@+id/ib_next_button"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            app:layout_constraintDimensionRatio="1:1"
+            android:background="@drawable/ic_next"
+            app:layout_constraintStart_toEndOf="@id/ib_play_button"
+            app:layout_constraintEnd_toStartOf="@id/ib_repeat_button"
+            app:layout_constraintTop_toTopOf="@id/ib_play_button"
+            app:layout_constraintBottom_toBottomOf="@id/ib_play_button"
+            />
+
+        <ImageButton
+            android:id="@+id/ib_repeat_button"
+            android:layout_width="0dp"
+            android:layout_height="20dp"
+            app:layout_constraintDimensionRatio="1:1"
+            android:background="@drawable/ic_repeat"
+            app:layout_constraintStart_toEndOf="@id/ib_next_button"
+            app:layout_constraintTop_toTopOf="@id/ib_next_button"
+            app:layout_constraintBottom_toBottomOf="@id/ib_next_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
