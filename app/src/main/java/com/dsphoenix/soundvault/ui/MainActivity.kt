@@ -13,6 +13,7 @@ import com.dsphoenix.soundvault.databinding.ActivityMainBinding
 import com.dsphoenix.soundvault.ui.homescreen.HomeFragment
 import com.dsphoenix.soundvault.ui.searchscreen.SearchFragment
 import com.dsphoenix.soundvault.ui.uploadscreen.UploadFileFragment
+import com.dsphoenix.soundvault.ui.userscreen.UserProfileFragment
 import com.dsphoenix.soundvault.utils.TAG
 import com.dsphoenix.soundvault.utils.navigation.NavigationController
 import com.firebase.ui.auth.AuthUI
@@ -62,6 +63,10 @@ class MainActivity : AppCompatActivity(), NavigationController {
         return when (item.itemId) {
             R.id.sign_out_option -> {
                 signOutActiveUser()
+                true
+            }
+            R.id.profile_option-> {
+                navigateToUserProfile()
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -128,18 +133,37 @@ class MainActivity : AppCompatActivity(), NavigationController {
     }
 
     private fun navigateToUploadScreen() {
+        showToolbarAndNavBar()
         popBackStack()
         replaceFragment(UploadFileFragment(), backStackTag = BACKSTACK_ROOT_FRAGMENT_TAG)
     }
 
     private fun navigateToHomeScreen() {
+        showToolbarAndNavBar()
         popBackStack()
         replaceFragment(HomeFragment(), tag = HomeFragment.navigationTag, backStackTag = BACKSTACK_ROOT_FRAGMENT_TAG)
     }
 
     private fun navigateToSearchScreen() {
+        showToolbarAndNavBar()
         popBackStack()
         replaceFragment(SearchFragment(), backStackTag = BACKSTACK_ROOT_FRAGMENT_TAG)
+    }
+
+    private fun navigateToUserProfile() {
+        hideToolbarAndNavbar()
+        popBackStack()
+        replaceFragment(UserProfileFragment(), backStackTag = BACKSTACK_ROOT_FRAGMENT_TAG)
+    }
+
+    private fun hideToolbarAndNavbar() {
+        binding.toolbar.visibility = View.GONE
+        binding.bottomNavigationBar.visibility = View.GONE
+    }
+
+    private fun showToolbarAndNavBar() {
+        binding.toolbar.visibility = View.VISIBLE
+        binding.bottomNavigationBar.visibility = View.VISIBLE
     }
 
     override fun onBackPressed() {
