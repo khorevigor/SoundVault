@@ -2,7 +2,11 @@ package com.dsphoenix.soundvault.ui.homescreen
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.RecyclerView
+import com.dsphoenix.soundvault.R
 import com.dsphoenix.soundvault.databinding.HomeScreenFragmentBinding
 import com.dsphoenix.soundvault.utils.viewbinding.ViewBindingFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -18,6 +22,10 @@ class HomeFragment : ViewBindingFragment<HomeScreenFragmentBinding>(HomeScreenFr
 
     private fun setupView() {
         binding.rvTracks.adapter = TracksAdapter()
+        val decorator = DividerItemDecoration(requireContext(), RecyclerView.VERTICAL)
+        decorator.setDrawable(ResourcesCompat.getDrawable(resources, R.drawable.divider, null)!!)
+        binding.rvTracks.addItemDecoration(decorator)
+
         viewModel.tracks.observe(viewLifecycleOwner) { tracks ->
             (binding.rvTracks.adapter as TracksAdapter).setData(tracks)
         }

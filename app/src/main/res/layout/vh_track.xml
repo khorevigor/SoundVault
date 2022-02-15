@@ -1,40 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="50dp"
+    android:layout_height="60dp"
     >
 
     <ImageView
         android:id="@+id/iv_note"
         android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_height="50dp"
         android:src="@drawable/ic_music_note"
         app:layout_constraintDimensionRatio="1:1"
+        android:layout_margin="5dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         />
 
     <TextView
         android:id="@+id/tv_name"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:textColor="@color/light_gray"
+        android:textSize="20sp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:gravity="start"
+        app:layout_constraintBottom_toTopOf="@id/tv_description"
         app:layout_constraintStart_toEndOf="@id/iv_note"
         app:layout_constraintTop_toTopOf="@id/iv_note"
-        app:layout_constraintBottom_toTopOf="@id/tv_description"
-        tools:text="Name"
-        />
+        app:layout_constraintEnd_toStartOf="@id/tv_rating_value"
+        tools:text="Linkin park - Burn it to the ground" />
 
     <TextView
         android:id="@+id/tv_description"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:textColor="@color/rose"
+        android:textSize="12sp"
+        android:gravity="start"
+        app:layout_constraintBottom_toBottomOf="@id/iv_note"
         app:layout_constraintStart_toEndOf="@id/iv_note"
         app:layout_constraintTop_toBottomOf="@id/tv_name"
-        app:layout_constraintBottom_toBottomOf="@id/iv_note"
-        tools:text="Description"
+        app:layout_constraintEnd_toStartOf="@id/tv_rating_value"
+        tools:text="Nu-metal, rock, alternative" />
+
+    <ImageView
+        android:id="@+id/iv_rating_star"
+        android:layout_width="0dp"
+        android:layout_height="18dp"
+        android:src="@drawable/ic_star_filled"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/tv_rating_value"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="15dp"
+        />
+
+    <TextView
+        android:id="@+id/tv_rating_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/iv_rating_star"
+        app:layout_constraintEnd_toEndOf="@id/iv_rating_star"
+        app:layout_constraintTop_toBottomOf="@id/iv_rating_star"
+        android:textColor="@color/rose"
+        android:textSize="16sp"
+        android:text="4.2"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

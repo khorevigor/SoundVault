@@ -11,4 +11,19 @@
     <string name="subscription_rbutton">Subscription</string>
     <string name="sign_out_option">Sign out</string>
     <string name="search_option">Search</string>
+    <string name="start_your_journey">Where your journey starts</string>
+    <string name="greetings">Greetings</string>
+    <string name="tracks_label">Tracks</string>
+    <string name="followers_label">Followers</string>
+    <string name="following_label">Following</string>
+    <string name="authored_label">Authored</string>
+    <string name="back_button">Back</string>
+    <string name="edit_button">Edit</string>
+    <string name="profile_option">Profile</string>
+    <string name="track_details_option">Track details</string>
+    <string name="parkin_link">Parkin Link</string>
+    <string name="kings_and_wretches">Kings and Wretches</string>
+    <string name="share_button">Share</string>
+    <string name="likes_label">Likes</string>
+    <string name="plays_label">Plays</string>
 </resources>
