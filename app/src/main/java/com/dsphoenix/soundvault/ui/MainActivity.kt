@@ -5,9 +5,11 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import com.dsphoenix.soundvault.R
+import com.dsphoenix.soundvault.databinding.ActivityMainBinding
 import com.dsphoenix.soundvault.ui.homescreen.HomeFragment
 import com.dsphoenix.soundvault.ui.searchscreen.SearchFragment
 import com.dsphoenix.soundvault.ui.uploadscreen.UploadFileFragment
@@ -24,6 +26,8 @@ private const val BACKSTACK_ROOT_FRAGMENT_TAG = "root_fragment"
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(), NavigationController {
+    private lateinit var binding: ActivityMainBinding
+
     private val signInLauncher = registerForActivityResult(
         FirebaseAuthUIActivityResultContract()
     ) { res ->
@@ -32,13 +36,21 @@ class MainActivity : AppCompatActivity(), NavigationController {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
 
         if (savedInstanceState == null) {
             startSignInFlow()
         }
 
+        setupView()
         initializeNavigationBar()
+    }
+
+    private fun setupView() {
+        binding.tvToolbarText.text = "Greetings"
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

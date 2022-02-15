@@ -17,7 +17,9 @@ class TracksAdapter : RecyclerView.Adapter<TracksAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = VhTrackBinding.inflate(
-            LayoutInflater.from(parent.context)
+            LayoutInflater.from(parent.context),
+            parent,
+            false
         )
 
         return ViewHolder(binding)

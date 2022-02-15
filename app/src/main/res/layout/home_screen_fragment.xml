@@ -8,23 +8,27 @@
     >
 
     <TextView
-        android:id="@+id/tv_home_label"
+        android:id="@+id/tv_invitation_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="@string/start_your_journey"
+        android:textSize="24sp"
+        android:textColor="@color/light_gray"
+        android:fontFamily="sans-serif-medium"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:textSize="20sp"
-        android:text="HOME SCREEN"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="30dp"
         />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_tracks"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
-        app:layout_constraintTop_toBottomOf="@id/tv_home_label"
+        app:layout_constraintTop_toBottomOf="@id/tv_invitation_label"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:orientation="vertical"
         tools:listitem="@layout/vh_track"
@@ -36,7 +40,8 @@
         android:layout_width="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_margin="20dp"
+        android:layout_marginBottom="80dp"
+        android:layout_marginEnd="20dp"
         tools:text="Subscribe"
         />
 
