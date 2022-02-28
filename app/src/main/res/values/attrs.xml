@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--    Theme attributes    -->
+    <attr name="switchBackgroundColorOn" format="color" />
+    <attr name="switchBackgroundColorOff" format="color" />
+    <attr name="textColorAccent" format="color" />
+    <attr name="iconColorPrimary" format="color" />
+    <attr name="iconColorSecondary" format="color" />
+    <attr name="iconColorAccent" format="color" />
+
     <declare-styleable name="BubblePicker">
         <attr name="inactiveColor" format="color" />
         <attr name="activeColor" format="color" />

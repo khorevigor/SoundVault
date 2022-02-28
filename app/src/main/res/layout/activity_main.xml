@@ -1,40 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="@drawable/gray_to_purple_gradient">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
-        android:background="@drawable/transparent_to_purple_gradient"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        app:layout_constraintTop_toTopOf="parent"
-        >
+        android:background="@drawable/transparent_to_purple_gradient"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/tv_toolbarText"
+            style="@style/Header.Large"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fontFamily="sans-serif-medium"
             android:gravity="center_vertical"
-            android:textSize="28sp"
-            android:textColor="@color/light_gray"
-            tools:text="@string/greetings"
-            />
+            tools:text="@string/greetings" />
 
     </androidx.appcompat.widget.Toolbar>
 
     <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragment_container_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:id="@+id/fragment_container_view"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:layout="@layout/home_screen_fragment"
-        />
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        tools:layout="@layout/home_screen_fragment" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationBar"
@@ -44,7 +39,6 @@
         app:itemIconTint="@color/bottom_nav_item_color_selector"
         app:itemTextColor="@color/bottom_nav_item_color_selector"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:menu="@menu/bottom_nav_menu"
-        />
+        app:menu="@menu/bottom_nav_menu" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
