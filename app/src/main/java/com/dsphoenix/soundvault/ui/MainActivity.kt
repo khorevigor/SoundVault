@@ -16,6 +16,7 @@ import com.dsphoenix.soundvault.ui.trackdetails.TrackDetailsFragment
 import com.dsphoenix.soundvault.ui.uploadscreen.UploadFileFragment
 import com.dsphoenix.soundvault.ui.userscreen.UserProfileFragment
 import com.dsphoenix.soundvault.utils.TAG
+import com.dsphoenix.soundvault.utils.navigation.INavigationController
 import com.dsphoenix.soundvault.utils.navigation.NavigationController
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
@@ -23,12 +24,16 @@ import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 private const val BACKSTACK_ROOT_FRAGMENT_TAG = "root_fragment"
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(), NavigationController {
+class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+
+    @Inject
+    lateinit var navigationController: NavigationController
 
     private val signInLauncher = registerForActivityResult(
         FirebaseAuthUIActivityResultContract()
@@ -38,6 +43,8 @@ class MainActivity : AppCompatActivity(), NavigationController {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        navigationController.initialize(supportFragmentManager, R.id.fragment_container_view)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -139,32 +146,32 @@ class MainActivity : AppCompatActivity(), NavigationController {
 
     private fun navigateToUploadScreen() {
         showToolbarAndNavBar()
-        popBackStack()
-        replaceFragment(UploadFileFragment(), backStackTag = BACKSTACK_ROOT_FRAGMENT_TAG)
+        navigationController.popBackStack()
+        navigationController.replaceFragment(UploadFileFragment(), backStackTag = BACKSTACK_ROOT_FRAGMENT_TAG)
     }
 
     private fun navigateToHomeScreen() {
         showToolbarAndNavBar()
-        popBackStack()
-        replaceFragment(HomeFragment(), tag = HomeFragment.navigationTag, backStackTag = BACKSTACK_ROOT_FRAGMENT_TAG)
+        navigationController.popBackStack()
+        navigationController.replaceFragment(HomeFragment(), tag = HomeFragment.navigationTag, backStackTag = BACKSTACK_ROOT_FRAGMENT_TAG)
     }
 
     private fun navigateToSearchScreen() {
         showToolbarAndNavBar()
-        popBackStack()
-        replaceFragment(SearchFragment(), backStackTag = BACKSTACK_ROOT_FRAGMENT_TAG)
+        navigationController.popBackStack()
+        navigationController.replaceFragment(SearchFragment(), backStackTag = BACKSTACK_ROOT_FRAGMENT_TAG)
     }
 
     private fun navigateToUserProfile() {
         hideToolbarAndNavbar()
-        popBackStack()
-        replaceFragment(UserProfileFragment(), backStackTag = BACKSTACK_ROOT_FRAGMENT_TAG)
+        navigationController.popBackStack()
+        navigationController.replaceFragment(UserProfileFragment(), backStackTag = BACKSTACK_ROOT_FRAGMENT_TAG)
     }
 
     private fun navigateToTrackDetails() {
         hideToolbarAndNavbar()
-        popBackStack()
-        replaceFragment(TrackDetailsFragment(), backStackTag = BACKSTACK_ROOT_FRAGMENT_TAG)
+        navigationController.popBackStack()
+        navigationController.replaceFragment(TrackDetailsFragment(), backStackTag = BACKSTACK_ROOT_FRAGMENT_TAG)
     }
 
     private fun hideToolbarAndNavbar() {
@@ -178,59 +185,14 @@ class MainActivity : AppCompatActivity(), NavigationController {
     }
 
     override fun onBackPressed() {
-        val homeFragment = supportFragmentManager.findFragmentByTag(HomeFragment.navigationTag)
-        if (supportFragmentManager.backStackEntryCount > 1)
-            popBackStack()
+        val homeFragment = navigationController.findFragmentByTag(HomeFragment.navigationTag)
+        if (navigationController.backStackEntryCount > 1)
+            navigationController.popBackStack()
         else if (homeFragment == null || !homeFragment.isVisible) {
+            binding.bottomNavigationBar.selectedItemId = R.id.navigation_home
             navigateToHomeScreen()
         } else {
             supportFinishAfterTransition()
         }
-    }
-
-    // NavigationController
-    override fun addFragment(
-        fragment: Fragment,
-        tag: String?,
-        addToBackStack: Boolean,
-        backStackTag: String?
-    ) {
-        supportFragmentManager.commit {
-            setReorderingAllowed(true)
-            add(R.id.fragment_container_view, fragment, tag)
-            if (addToBackStack) {
-                addToBackStack(backStackTag)
-            }
-        }
-    }
-
-    override fun removeFragment(fragment: Fragment) {
-        supportFragmentManager.commit {
-            setReorderingAllowed(true)
-            remove(fragment)
-        }
-    }
-
-    override fun replaceFragment(
-        fragment: Fragment,
-        tag: String?,
-        addToBackStack: Boolean,
-        backStackTag: String?
-    ) {
-        supportFragmentManager.commit {
-            setReorderingAllowed(true)
-            replace(R.id.fragment_container_view, fragment, tag)
-            if (addToBackStack) {
-                addToBackStack(backStackTag)
-            }
-        }
-    }
-
-    override fun popBackStack() {
-        supportFragmentManager.popBackStackImmediate()
-    }
-
-    override fun popBackStack(tag: String, flags: Int) {
-        supportFragmentManager.popBackStackImmediate(tag, flags)
     }
 }

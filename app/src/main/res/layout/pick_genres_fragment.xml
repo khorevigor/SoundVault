@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingHorizontal="40dp">
+
+    <TextView
+        android:id="@+id/tv_add_genres_label"
+        style="@style/subchapterHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/add_genres_label"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <AutoCompleteTextView
+        android:id="@+id/autocompleteview"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:completionThreshold="3"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toStartOf="@id/btn_add"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_add_genres_label" />
+
+    <ImageButton
+        android:id="@+id/btn_add"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/circle_background"
+        android:backgroundTint="@color/rose"
+        android:src="@drawable/ic_plus"
+        app:layout_constraintBottom_toBottomOf="@id/autocompleteview"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/autocompleteview"
+        app:layout_constraintTop_toTopOf="@id/autocompleteview" />
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/chips"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        app:layout_constraintTop_toBottomOf="@id/autocompleteview" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
