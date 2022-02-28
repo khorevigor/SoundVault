@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="BubblePicker">
+        <attr name="inactiveColor" format="color" />
+        <attr name="activeColor" format="color" />
+        <attr name="inactiveRadius" format="dimension" />
+        <attr name="activeRadius" format="dimension" />
+        <attr name="bubblesCount" format="integer" />
+        <attr name="defaultActive" format="integer" />
+        <attr name="inactiveIconSize" format="dimension" />
+        <attr name="activeIconSize" format="dimension" />
+        <attr name="activeIconColor" format="color" />
+        <attr name="inactiveIconColor" format="color" />
+        <attr name="drawableIcon1" format="reference" />
+        <attr name="drawableIcon2" format="reference" />
+        <attr name="drawableIcon3" format="reference" />
+        <attr name="drawableIcon4" format="reference" />
+        <attr name="drawableIcon5" format="reference" />
+    </declare-styleable>
+</resources>
