@@ -1,79 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/btn_pick_file"
-        android:layout_width="60dp"
-        android:layout_height="50dp"
-        app:icon="@drawable/ic_menu_archive"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragment_container_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:layout_marginStart="40dp"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/et_file_name"
-        />
+        tools:layout="@layout/pick_file_fragment" />
 
-    <EditText
-        android:id="@+id/et_file_name"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:hint="@string/upload_file_filename_placeholder"
-        android:gravity="center_vertical"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="40dp"
-        app:layout_constraintStart_toEndOf="@id/btn_pick_file"
-        app:layout_constraintTop_toTopOf="@id/btn_pick_file"
-        app:layout_constraintBottom_toBottomOf="@id/btn_pick_file"
+    <TextView
+        android:id="@+id/tv_test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="40dp"
+        app:layout_constraintBottom_toTopOf="@id/bubble_picker"
         app:layout_constraintEnd_toEndOf="parent"
-        />
+        app:layout_constraintStart_toStartOf="parent" />
 
-    <EditText
-        android:id="@+id/et_file_description"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="@string/description_placeholder"
-        app:layout_constraintTop_toBottomOf="@id/btn_pick_file"
-        app:layout_constraintStart_toStartOf="@id/btn_pick_file"
-        app:layout_constraintEnd_toEndOf="@id/et_file_name"
-        />
-
-    <RadioGroup
-        android:id="@+id/rg_distribution_plan"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/et_file_description"
-        app:layout_constraintStart_toStartOf="@id/et_file_description"
-        app:layout_constraintEnd_toEndOf="@id/et_file_description"
-        >
-        <RadioButton
-            android:id="@+id/rb_free_for_all"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/free_for_all_rbutton"
-            />
-        <RadioButton
-            android:id="@+id/rb_subscription"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/subscription_rbutton"
-            />
-    </RadioGroup>
-
-    <Button
-        android:id="@+id/btn_upload"
-        android:layout_width="100dp"
-        android:layout_height="40dp"
-        android:text="@string/upload_button"
-        android:layout_marginTop="20dp"
-        app:layout_constraintStart_toStartOf="@id/rg_distribution_plan"
-        app:layout_constraintEnd_toEndOf="@id/rg_distribution_plan"
-        app:layout_constraintTop_toBottomOf="@id/rg_distribution_plan"
-        />
+    <com.dsphoenix.soundvault.widgets.bubblepicker.BubblePicker
+        android:id="@+id/bubble_picker"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginBottom="50dp"
+        app:activeColor="@color/rose"
+        app:activeIconColor="@color/light_gray"
+        app:activeRadius="50dp"
+        app:bubblesCount="4"
+        app:drawableIcon1="@drawable/ic_audio_file"
+        app:drawableIcon2="@drawable/ic_image"
+        app:drawableIcon3="@drawable/ic_description"
+        app:drawableIcon4="@drawable/ic_monetization"
+        app:inactiveColor="@color/deep_purple"
+        app:inactiveIconColor="@color/gray"
+        app:inactiveIconSize="30dp"
+        app:inactiveRadius="40dp"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

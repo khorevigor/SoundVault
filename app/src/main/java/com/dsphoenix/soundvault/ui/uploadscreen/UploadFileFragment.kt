@@ -2,56 +2,73 @@ package com.dsphoenix.soundvault.ui.uploadscreen
 
 import android.os.Bundle
 import android.view.View
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.widget.doAfterTextChanged
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import com.dsphoenix.soundvault.R
 import com.dsphoenix.soundvault.databinding.UploadScreenFragmentBinding
-import com.dsphoenix.soundvault.utils.constants.DistributionPlan
+import com.dsphoenix.soundvault.ui.uploadscreen.forms.DistributionPlanFragment
+import com.dsphoenix.soundvault.ui.uploadscreen.forms.PickFileFragment
+import com.dsphoenix.soundvault.ui.uploadscreen.forms.PickGenresFragment
+import com.dsphoenix.soundvault.ui.uploadscreen.forms.PickImageCoverFragment
+import com.dsphoenix.soundvault.utils.navigation.NavigationController
 import com.dsphoenix.soundvault.utils.viewbinding.ViewBindingFragment
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class UploadFileFragment: ViewBindingFragment<UploadScreenFragmentBinding>(UploadScreenFragmentBinding::inflate) {
-    private val viewModel: UploadFileViewModel by viewModels()
+    private val viewModel: UploadFileViewModel by activityViewModels()
 
-    private val activityLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) {uri ->
-        viewModel.uri.value = uri
-    }
+    @Inject
+    lateinit var navigationController: NavigationController
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        navigationController.initialize(childFragmentManager, R.id.fragment_container_view)
         setupView()
     }
 
     private fun setupView() {
-        binding.btnPickFile.setOnClickListener { onPickFileClick() }
-        binding.btnUpload.setOnClickListener { onUploadButtonClick() }
-        binding.btnUpload.isEnabled = false
-        viewModel.filename.observe(viewLifecycleOwner) { text ->
-            val editText = binding.etFileName
-            if (text != editText.text.toString())
-                editText.setText(text)
-        }
-        viewModel.isValid.observe(viewLifecycleOwner) {
-            binding.btnUpload.isEnabled = it
-        }
-        binding.etFileName.doAfterTextChanged {
-            viewModel.filename.value = it.toString()
-        }
-        binding.etFileDescription.doAfterTextChanged {
-            viewModel.description.value = it.toString()
-        }
-
-        binding.rgDistributionPlan.setOnCheckedChangeListener { _, optionId ->
-            when (optionId) {
-                R.id.rb_free_for_all -> viewModel.distributionPlan.value = DistributionPlan.FREE_FOR_ALL
-                R.id.rb_subscription -> viewModel.distributionPlan.value = DistributionPlan.SUBSCRIPTION
+        showPickFileFragment()
+        binding.bubblePicker.setOnActiveChangeListener { pos ->
+            when (pos) {
+                0 -> {
+                    showPickFileFragment()
+                    binding.tvTest.text = "Position 1"
+                    true
+                }
+                1 -> {
+                    showPickImageFragment()
+                    binding.tvTest.text = "Position 2"
+                    true
+                }
+                2 -> {
+                    showPickGenresFragment()
+                    binding.tvTest.text = "Position 3"
+                    true
+                }
+                3 -> {
+                    showDistributionPlanFragment()
+                    binding.tvTest.text = "Position 4"
+                    true
+                }
+                else -> false
             }
         }
     }
 
-    private fun onPickFileClick() {
-        activityLauncher.launch("audio/mpeg")
+    private fun showPickFileFragment() {
+        navigationController.replaceFragment(PickFileFragment(), addToBackStack = false)
+    }
+
+    private fun showPickImageFragment() {
+        navigationController.replaceFragment(PickImageCoverFragment(), addToBackStack = false)
+    }
+
+    private fun showPickGenresFragment() {
+        navigationController.replaceFragment(PickGenresFragment(), addToBackStack = false)
+    }
+
+    private fun showDistributionPlanFragment() {
+        navigationController.replaceFragment(DistributionPlanFragment(), addToBackStack = false)
     }
 
     private fun onUploadButtonClick() {

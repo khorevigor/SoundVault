@@ -8,7 +8,7 @@
     <string name="search_button">Search</string>
     <string name="my_library_button">My library</string>
     <string name="free_for_all_rbutton">Free for all</string>
-    <string name="subscription_rbutton">Subscription</string>
+    <string name="subscription_rbutton">Part of global subscription</string>
     <string name="sign_out_option">Sign out</string>
     <string name="search_option">Search</string>
     <string name="start_your_journey">Where your journey starts</string>
@@ -26,4 +26,12 @@
     <string name="share_button">Share</string>
     <string name="likes_label">Likes</string>
     <string name="plays_label">Plays</string>
+    <string name="set_author_s_name">Set author\'s name</string>
+    <string name="switch_single_label">Single</string>
+    <string name="switch_album_part">Part of an album</string>
+    <string name="switch_playlist_part">Part of a playlist</string>
+    <string name="one_time_purchase_rbutton">One time purchase</string>
+    <string name="single_price_label">Single price</string>
+    <string name="choose_distribution_plan_label">Choose distribution plan:</string>
+    <string name="add_genres_label">Add some genres</string>
 </resources>

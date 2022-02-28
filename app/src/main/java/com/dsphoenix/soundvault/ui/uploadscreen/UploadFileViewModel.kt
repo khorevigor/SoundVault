@@ -9,6 +9,7 @@ import com.dsphoenix.soundvault.utils.TAG
 import com.dsphoenix.soundvault.utils.constants.DistributionPlan
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,11 +23,12 @@ class UploadFileViewModel @Inject constructor(
     val isValid: LiveData<Boolean>
 
     init {
-        filename = Transformations.map(uri) {uri.value?.lastPathSegment} as MutableLiveData<String>
-        isValid = Transformations.switchMap(filename) {Transformations.map(uri) {uri.value != null && !filename.value.isNullOrEmpty()} }
+        Log.d(TAG, "ViewModel initialized")
+        filename = Transformations.map(uri) { uri -> getFileName(uri) } as MutableLiveData<String>
+        isValid = Transformations.switchMap(filename) { Transformations.map(uri) { uri.value != null && !filename.value.isNullOrEmpty() } }
     }
 
-    fun uploadTrack(){
+    fun uploadTrack() {
         Log.d(TAG, "filename is ${filename.value}, description is ${description.value}")
         Log.d(TAG, "uri is ${uri.value}")
 
@@ -42,4 +44,6 @@ class UploadFileViewModel @Inject constructor(
             audioRepository.uploadTrack(track)
         }
     }
+
+    private fun getFileName(uri: Uri) = File(uri.path!!).nameWithoutExtension
 }
