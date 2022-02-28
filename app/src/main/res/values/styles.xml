@@ -1,39 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="CircleImage" parent="">
+
+    <style name="BackgroundText">
+        <item name="android:textColor">?android:textColorSecondary</item>
+    </style>
+
+    <style name="Header">
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="Header.Large">
+        <item name="android:textSize">28sp</item>
+    </style>
+
+    <style name="Header.Medium" parent="Header">
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="Header.Small">
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="AccentRadioButton" parent="Widget.AppCompat.CompoundButton.RadioButton">
+        <item name="buttonTint">?colorAccent</item>
+    </style>
+
+    <style name="AccentSwitch" parent="Widget.AppCompat.CompoundButton.Switch">
+        <item name="thumbTint">?colorAccent</item>
+        <item name="trackTint">@color/switch_track_color_selector</item>
+    </style>
+
+    <style name="CircleImage">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
     </style>
 
-    <style name="chapterHeader" parent="">
-        <item name="android:textColor">@color/light_gray</item>
-        <item name="android:fontFamily">sans-serif-medium</item>
-        <item name="android:textSize">24sp</item>
-    </style>
-
-    <style name="subchapterHeader" parent="chapterHeader">
-        <item name="android:textSize">20sp</item>
-    </style>
-
-    <style name="themedRadioButton" parent="">
-        <item name="buttonTint">@color/rose</item>
-        <item name="android:textColor">@color/light_gray</item>
-    </style>
-
-    <style name="themedSwitch" parent="">
-        <item name="thumbTint">@color/rose</item>
-        <item name="trackTint">@color/material_switch_track_selector</item>
-    </style>
-
-    <style name="generalText" parent="">
-        <item name="android:textColor">@color/light_gray</item>
-    </style>
-
-    <style name="circleButton" parent="">
+    <style name="CircleButton">
         <item name="android:background">@drawable/circle_background</item>
     </style>
 
-    <style name="circleButton.Rose" parent="circleButton">
-        <item name="android:backgroundTint">@color/rose</item>
+    <style name="CircleButton.Accent">
+        <item name="android:backgroundTint">?colorAccent</item>
     </style>
 </resources>

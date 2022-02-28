@@ -1,16 +1,18 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.SoundVault" parent="Theme.MaterialComponents.NoActionBar">
-        <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_500</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
-        <item name="colorOnPrimary">@color/white</item>
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_700</item>
-        <item name="colorOnSecondary">@color/black</item>
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
+    <style name="MainTheme" parent="@style/Theme.MaterialComponents.NoActionBar">
+        <item name="colorPrimary">@color/deep_purple</item>
+        <item name="colorAccent">@color/rose</item>
+        <item name="android:textColorPrimary">@color/light_gray</item>
+        <item name="android:textColorSecondary">@color/gray</item>
+        <item name="textColorAccent">?colorAccent</item>
+        <item name="iconColorPrimary">@color/light_gray</item>
+        <item name="iconColorSecondary">@color/gray</item>
+        <item name="iconColorAccent">?colorAccent</item>
+        <item name="switchBackgroundColorOn">@color/rose_transparent</item>
+        <item name="switchBackgroundColorOff">@color/gray_transparent</item>
+        <item name="radioButtonStyle">@style/AccentRadioButton</item>
+        <item name="switchStyle">@style/AccentSwitch</item>
+        <item name="android:textColor">?android:textColorPrimary</item>
     </style>
 </resources>
