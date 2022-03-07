@@ -1,4 +1,4 @@
-package com.dsphoenix.soundvault.ui.uploadscreen.forms
+package com.dsphoenix.soundvault.ui.uploadscreen.forms.pickgenres
 
 class AutocompleteDictionaryStub {
     companion object {

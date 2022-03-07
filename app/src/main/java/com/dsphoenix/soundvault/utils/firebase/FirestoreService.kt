@@ -19,17 +19,23 @@ class FirestoreService {
         val remotePath = "audio/${track.name}"
         val updatedTrack: Track = track.copy(path = remotePath)
 
-        val item = hashMapOf(
-            DbConstants.TRACK_NAME_FIELD to track.name,
-            DbConstants.TRACK_DESCRIPTION_FIELD to track.description,
-            DbConstants.TRACK_PATH to track.path,
-            DbConstants.TRACK_DISTRIBUTION_PLAN_FIELD to track.distributionPlan
-        )
-
-        try {
-            db.collection(DbConstants.TRACK_COLLECTION).add(item).await()
-        } catch (cause: FirebaseFirestoreException) {
-            Log.d(TAG, "Error uploading file: $cause")
+        DbConstants.apply {
+            val item = hashMapOf(
+                TRACK_NAME_FIELD to track.name,
+                TRACK_AUTHOR_NAME to track.authorName,
+                TRACK_DESCRIPTION_FIELD to track.description,
+                TRACK_PATH_FIELD to track.path,
+                TRACK_IMAGE_PATH_FIELD to track.imagePath,
+                TRACK_GENRES_FIELD to track.genres,
+                TRACK_DISTRIBUTION_PLAN_FIELD to track.distributionPlan,
+                TRACK_DISTRIBUTION_BUNDLE_FIELD to track.distributionBundle,
+                TRACK_SINGLE_PRICE_FIELD to track.singlePrice
+            )
+            try {
+                db.collection(TRACK_COLLECTION).add(item).await()
+            } catch (cause: FirebaseFirestoreException) {
+                Log.d(TAG, "Error uploading file: $cause")
+            }
         }
         return updatedTrack
     }

@@ -1,4 +1,4 @@
-package com.dsphoenix.soundvault.ui.uploadscreen.forms
+package com.dsphoenix.soundvault.ui.uploadscreen.forms.pickfile
 
 import android.net.Uri
 import android.os.Bundle
@@ -6,10 +6,11 @@ import android.util.Log
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.res.ResourcesCompat.getDrawable
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.activityViewModels
 import com.dsphoenix.soundvault.R
 import com.dsphoenix.soundvault.databinding.PickFileFragmentBinding
-import com.dsphoenix.soundvault.ui.uploadscreen.UploadFileViewModel
+import com.dsphoenix.soundvault.ui.uploadscreen.CreateTrackViewModel
 import com.dsphoenix.soundvault.utils.TAG
 import com.dsphoenix.soundvault.utils.viewbinding.ViewBindingFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -19,7 +20,7 @@ class PickFileFragment :
     ViewBindingFragment<PickFileFragmentBinding>(PickFileFragmentBinding::inflate) {
     private val fileMimeType = "audio/mpeg"
 
-    private val viewModel: UploadFileViewModel by activityViewModels()
+    private val viewModel: CreateTrackViewModel by activityViewModels()
 
     private val activityLauncher =
         registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
@@ -33,14 +34,28 @@ class PickFileFragment :
     }
 
     private fun setupView() {
-        binding.btnPickFile.setOnClickListener { onPickFileClick() }
-        if (!viewModel.filename.value.isNullOrEmpty()) {
-            showFilePickedIcon()
-        }
-        viewModel.filename.observe(viewLifecycleOwner) { text ->
-            val editText = binding.etFileName
-            if (text != editText.text.toString())
-                editText.setText(text)
+        binding.apply {
+            viewModel.fileForm.apply {
+                filename.observe(viewLifecycleOwner) { text ->
+                    if (text != etFileName.text.toString())
+                        etFileName.setText(text)
+                }
+                authorName.observe(viewLifecycleOwner) { text ->
+                    if (text != etAuthorName.text.toString())
+                        etAuthorName.setText(text)
+                }
+
+                btnPickFile.setOnClickListener { onPickFileClick() }
+                if (!filename.value.isNullOrEmpty()) {
+                    showFilePickedIcon()
+                }
+                etFileName.doAfterTextChanged { text ->
+                    setFileName(text.toString())
+                }
+                etAuthorName.doAfterTextChanged { text ->
+                    setAuthorName(text.toString())
+                }
+            }
         }
     }
 
@@ -49,9 +64,7 @@ class PickFileFragment :
     }
 
     private fun onFilePicked(uri: Uri) {
-        Log.d(TAG, "onFilePicked called with $uri")
-        viewModel.uri.value = uri
-
+        viewModel.fileForm.setUri(uri)
         showFilePickedIcon()
     }
 

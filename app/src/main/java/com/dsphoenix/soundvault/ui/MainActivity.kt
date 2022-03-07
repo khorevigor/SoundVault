@@ -6,17 +6,14 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.commit
 import com.dsphoenix.soundvault.R
 import com.dsphoenix.soundvault.databinding.ActivityMainBinding
 import com.dsphoenix.soundvault.ui.homescreen.HomeFragment
 import com.dsphoenix.soundvault.ui.searchscreen.SearchFragment
 import com.dsphoenix.soundvault.ui.trackdetails.TrackDetailsFragment
-import com.dsphoenix.soundvault.ui.uploadscreen.UploadFileFragment
+import com.dsphoenix.soundvault.ui.uploadscreen.CreateTrackFragment
 import com.dsphoenix.soundvault.ui.userscreen.UserProfileFragment
 import com.dsphoenix.soundvault.utils.TAG
-import com.dsphoenix.soundvault.utils.navigation.INavigationController
 import com.dsphoenix.soundvault.utils.navigation.NavigationController
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
@@ -147,7 +144,7 @@ class MainActivity : AppCompatActivity() {
     private fun navigateToUploadScreen() {
         showToolbarAndNavBar()
         navigationController.popBackStack()
-        navigationController.replaceFragment(UploadFileFragment(), backStackTag = BACKSTACK_ROOT_FRAGMENT_TAG)
+        navigationController.replaceFragment(CreateTrackFragment(), backStackTag = BACKSTACK_ROOT_FRAGMENT_TAG)
     }
 
     private fun navigateToHomeScreen() {

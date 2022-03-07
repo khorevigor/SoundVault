@@ -4,19 +4,19 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import com.dsphoenix.soundvault.R
-import com.dsphoenix.soundvault.databinding.UploadScreenFragmentBinding
-import com.dsphoenix.soundvault.ui.uploadscreen.forms.DistributionPlanFragment
-import com.dsphoenix.soundvault.ui.uploadscreen.forms.PickFileFragment
-import com.dsphoenix.soundvault.ui.uploadscreen.forms.PickGenresFragment
-import com.dsphoenix.soundvault.ui.uploadscreen.forms.PickImageCoverFragment
+import com.dsphoenix.soundvault.databinding.CreateTrackFragmentBinding
+import com.dsphoenix.soundvault.ui.uploadscreen.forms.distributionplan.DistributionPlanFragment
+import com.dsphoenix.soundvault.ui.uploadscreen.forms.pickfile.PickFileFragment
+import com.dsphoenix.soundvault.ui.uploadscreen.forms.pickgenres.PickGenresFragment
+import com.dsphoenix.soundvault.ui.uploadscreen.forms.pickimage.PickImageCoverFragment
 import com.dsphoenix.soundvault.utils.navigation.NavigationController
 import com.dsphoenix.soundvault.utils.viewbinding.ViewBindingFragment
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class UploadFileFragment: ViewBindingFragment<UploadScreenFragmentBinding>(UploadScreenFragmentBinding::inflate) {
-    private val viewModel: UploadFileViewModel by activityViewModels()
+class CreateTrackFragment: ViewBindingFragment<CreateTrackFragmentBinding>(CreateTrackFragmentBinding::inflate) {
+    private val viewModel: CreateTrackViewModel by activityViewModels()
 
     @Inject
     lateinit var navigationController: NavigationController
@@ -32,26 +32,26 @@ class UploadFileFragment: ViewBindingFragment<UploadScreenFragmentBinding>(Uploa
             when (pos) {
                 0 -> {
                     showPickFileFragment()
-                    binding.tvTest.text = "Position 1"
                     true
                 }
                 1 -> {
                     showPickImageFragment()
-                    binding.tvTest.text = "Position 2"
                     true
                 }
                 2 -> {
                     showPickGenresFragment()
-                    binding.tvTest.text = "Position 3"
                     true
                 }
                 3 -> {
                     showDistributionPlanFragment()
-                    binding.tvTest.text = "Position 4"
                     true
                 }
                 else -> false
             }
+        }
+        binding.btnUpload.setOnClickListener { onUploadButtonClick() }
+        viewModel.isValid.observe(viewLifecycleOwner) { valid ->
+            binding.btnUpload.visibility = if (valid) View.VISIBLE else View.GONE
         }
     }
 

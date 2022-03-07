@@ -14,20 +14,11 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:layout="@layout/pick_file_fragment" />
 
-    <TextView
-        android:id="@+id/tv_test"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="40dp"
-        app:layout_constraintBottom_toTopOf="@id/bubble_picker"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
     <com.dsphoenix.soundvault.widgets.bubblepicker.BubblePicker
         android:id="@+id/bubble_picker"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:layout_marginBottom="50dp"
+        android:layout_marginBottom="60dp"
         app:activeColor="?colorAccent"
         app:activeIconColor="?iconColorPrimary"
         app:activeRadius="50dp"
@@ -41,5 +32,22 @@
         app:inactiveIconSize="30dp"
         app:inactiveRadius="40dp"
         app:layout_constraintBottom_toBottomOf="parent" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btn_upload"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:backgroundTint="?colorAccent"
+        android:src="@drawable/ic_up"
+        android:text="@string/upload_button"
+        android:visibility="gone"
+        app:borderWidth="0dp"
+        app:fabCustomSize="70dp"
+        app:layout_constraintBottom_toBottomOf="@id/bubble_picker"
+        app:layout_constraintEnd_toEndOf="@id/bubble_picker"
+        app:layout_constraintStart_toStartOf="@id/bubble_picker"
+        app:tint="?iconColorPrimary"
+        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
