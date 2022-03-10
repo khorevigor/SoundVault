@@ -34,4 +34,5 @@
     <string name="single_price_label">Single price</string>
     <string name="choose_distribution_plan_label">Choose distribution plan:</string>
     <string name="add_genres_label">Add some genres</string>
+    <string name="track_viewholder_title">%1$s - %2$s</string>
 </resources>

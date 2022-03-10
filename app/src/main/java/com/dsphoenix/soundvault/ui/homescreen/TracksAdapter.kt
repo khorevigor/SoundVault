@@ -3,10 +3,12 @@ package com.dsphoenix.soundvault.ui.homescreen
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.dsphoenix.soundvault.R
 import com.dsphoenix.soundvault.data.model.Track
-import com.dsphoenix.soundvault.databinding.VhTrackBinding
+import com.dsphoenix.soundvault.databinding.TrackViewHolderBinding
 
 class TracksAdapter : RecyclerView.Adapter<TracksAdapter.ViewHolder>() {
 
@@ -16,7 +18,7 @@ class TracksAdapter : RecyclerView.Adapter<TracksAdapter.ViewHolder>() {
     override fun getItemCount() = items.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = VhTrackBinding.inflate(
+        val binding = TrackViewHolderBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false
@@ -35,14 +37,20 @@ class TracksAdapter : RecyclerView.Adapter<TracksAdapter.ViewHolder>() {
         items = newItems
     }
 
-    class ViewHolder(private val binding: VhTrackBinding): RecyclerView.ViewHolder(binding.root) {
+    class ViewHolder(private val binding: TrackViewHolderBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(track: Track) {
-            binding.tvName.text = track.name
+            binding.apply {
+                tvName.text = root.context.getString(
+                    R.string.track_viewholder_title,
+                    track.authorName,
+                    track.name
+                )
 
-            if (track.description.isNullOrEmpty())
-                binding.tvDescription.visibility = View.GONE
-            else
-                binding.tvDescription.text = track.description
+                if (track.genres.isNullOrEmpty())
+                    tvGenres.visibility = View.GONE
+                else
+                    tvGenres.text = track.genres.joinToString( ", ")
+            }
         }
     }
 }

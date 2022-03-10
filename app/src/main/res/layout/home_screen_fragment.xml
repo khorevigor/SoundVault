@@ -26,7 +26,7 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_invitation_label"
-        tools:listitem="@layout/vh_track" />
+        tools:listitem="@layout/track_view_holder" />
 
     <Button
         android:id="@+id/sub_button"
