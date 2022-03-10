@@ -16,8 +16,10 @@ class FirestoreService {
     private val db = FirebaseFirestore.getInstance()
 
     suspend fun writeTrack(track: Track): Track {
-        val remotePath = "audio/${track.name}"
-        val updatedTrack: Track = track.copy(path = remotePath)
+        val trackAuthorAndName = "${track.authorName}_${track.name}"
+        val remotePath = "audio/$trackAuthorAndName"
+        val remoteCoverPath = "image/$trackAuthorAndName"
+        val updatedTrack: Track = track.copy(path = remotePath, imagePath = remoteCoverPath)
 
         DbConstants.apply {
             val item = hashMapOf(
