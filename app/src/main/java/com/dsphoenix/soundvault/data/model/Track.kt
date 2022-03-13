@@ -5,6 +5,7 @@ import com.dsphoenix.soundvault.utils.constants.DistributionBundle
 import com.dsphoenix.soundvault.utils.constants.DistributionPlan
 
 data class Track(
+    val id: String? = null,
     val name: String? = null,
     val authorName: String? = null,
     val description: String? = null,

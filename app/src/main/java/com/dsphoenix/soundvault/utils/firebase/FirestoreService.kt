@@ -19,7 +19,7 @@ class FirestoreService {
         val trackAuthorAndName = "${track.authorName}_${track.name}"
         val remotePath = "audio/$trackAuthorAndName"
         val remoteCoverPath = "image/$trackAuthorAndName"
-        val updatedTrack: Track = track.copy(path = remotePath, imagePath = remoteCoverPath)
+        var updatedTrack: Track = track.copy(path = remotePath, imagePath = remoteCoverPath)
 
         DbConstants.apply {
             val item = hashMapOf(
@@ -34,7 +34,9 @@ class FirestoreService {
                 TRACK_SINGLE_PRICE_FIELD to track.singlePrice
             )
             try {
-                db.collection(TRACK_COLLECTION).add(item).await()
+                val id = db.collection(TRACK_COLLECTION).add(item).await().id
+                updatedTrack = updatedTrack.copy(id = id)
+                db.collection(TRACK_COLLECTION).document(id).update(TRACK_ID_FIELD, id)
             } catch (cause: FirebaseFirestoreException) {
                 Log.d(TAG, "Error uploading file: $cause")
             }

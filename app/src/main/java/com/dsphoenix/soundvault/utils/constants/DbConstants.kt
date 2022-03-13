@@ -2,6 +2,7 @@ package com.dsphoenix.soundvault.utils.constants
 
 object DbConstants {
     const val TRACK_COLLECTION = "audioTracks"
+    const val TRACK_ID_FIELD = "id"
     const val TRACK_NAME_FIELD = "name"
     const val TRACK_AUTHOR_NAME = "authorName"
     const val TRACK_DESCRIPTION_FIELD = "description"
