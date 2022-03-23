@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.dsphoenix.soundvault.R
 import com.dsphoenix.soundvault.databinding.HomeScreenFragmentBinding
+import com.dsphoenix.soundvault.ui.MainActivity
+import com.dsphoenix.soundvault.utils.navigation.NavigationController
 import com.dsphoenix.soundvault.utils.viewbinding.ViewBindingFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -15,6 +17,8 @@ import dagger.hilt.android.AndroidEntryPoint
 class HomeFragment : ViewBindingFragment<HomeScreenFragmentBinding>(HomeScreenFragmentBinding::inflate) {
 
     private val viewModel: HomeViewModel by viewModels()
+
+    var onTrackClickListener: ((String) -> Unit)? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setupView()
@@ -27,7 +31,10 @@ class HomeFragment : ViewBindingFragment<HomeScreenFragmentBinding>(HomeScreenFr
         binding.rvTracks.addItemDecoration(decorator)
 
         viewModel.tracks.observe(viewLifecycleOwner) { tracks ->
-            (binding.rvTracks.adapter as TracksAdapter).setData(tracks)
+            (binding.rvTracks.adapter as TracksAdapter).apply {
+                setData(tracks)
+                onItemClickListener = onTrackClickListener
+            }
         }
         binding.subButton.setOnClickListener { viewModel.toggleSubscription() }
         viewModel.user.observe(viewLifecycleOwner) { user ->

@@ -3,7 +3,6 @@ package com.dsphoenix.soundvault.ui.homescreen
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.dsphoenix.soundvault.R
@@ -13,6 +12,8 @@ import com.dsphoenix.soundvault.databinding.TrackViewHolderBinding
 class TracksAdapter : RecyclerView.Adapter<TracksAdapter.ViewHolder>() {
 
     private var items: List<Track> = emptyList()
+
+    var onItemClickListener: ((String) -> Unit)? = null
 
     private fun getItem(position: Int) = items[position]
     override fun getItemCount() = items.size
@@ -24,7 +25,7 @@ class TracksAdapter : RecyclerView.Adapter<TracksAdapter.ViewHolder>() {
             false
         )
 
-        return ViewHolder(binding)
+        return ViewHolder(binding, onItemClickListener)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -37,9 +38,10 @@ class TracksAdapter : RecyclerView.Adapter<TracksAdapter.ViewHolder>() {
         items = newItems
     }
 
-    class ViewHolder(private val binding: TrackViewHolderBinding): RecyclerView.ViewHolder(binding.root) {
+    class ViewHolder(private val binding: TrackViewHolderBinding, private val listener: ((String) -> Unit)?): RecyclerView.ViewHolder(binding.root) {
         fun bind(track: Track) {
             binding.apply {
+                root.setOnClickListener { listener?.invoke(track.id as String) }
                 tvName.text = root.context.getString(
                     R.string.track_viewholder_title,
                     track.authorName,

@@ -74,10 +74,6 @@ class MainActivity : AppCompatActivity() {
                 navigateToUserProfile()
                 true
             }
-            R.id.track_details_option-> {
-                navigateToTrackDetails()
-                true
-            }
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -150,7 +146,10 @@ class MainActivity : AppCompatActivity() {
     private fun navigateToHomeScreen() {
         showToolbarAndNavBar()
         navigationController.popBackStack()
-        navigationController.replaceFragment(HomeFragment(), tag = HomeFragment.navigationTag, backStackTag = BACKSTACK_ROOT_FRAGMENT_TAG)
+        val fragment = HomeFragment().apply {
+            onTrackClickListener = ::navigateToTrackDetails
+        }
+        navigationController.replaceFragment(fragment, tag = HomeFragment.navigationTag, backStackTag = BACKSTACK_ROOT_FRAGMENT_TAG)
     }
 
     private fun navigateToSearchScreen() {
@@ -165,10 +164,10 @@ class MainActivity : AppCompatActivity() {
         navigationController.replaceFragment(UserProfileFragment(), backStackTag = BACKSTACK_ROOT_FRAGMENT_TAG)
     }
 
-    private fun navigateToTrackDetails() {
+    private fun navigateToTrackDetails(trackId: String) {
         hideToolbarAndNavbar()
         navigationController.popBackStack()
-        navigationController.replaceFragment(TrackDetailsFragment(), backStackTag = BACKSTACK_ROOT_FRAGMENT_TAG)
+        navigationController.replaceFragment(TrackDetailsFragment.createInstance(trackId), backStackTag = BACKSTACK_ROOT_FRAGMENT_TAG)
     }
 
     private fun hideToolbarAndNavbar() {
