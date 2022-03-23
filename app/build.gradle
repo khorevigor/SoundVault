@@ -79,4 +79,8 @@ dependencies {
     // LiveData extensions
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.4.0"
 
+    // Glide
+    def glideVersion = "4.13.0"
+    implementation "com.github.bumptech.glide:glide:$glideVersion"
+    annotationProcessor "com.github.bumptech.glide:compiler:$glideVersion"
 }
