@@ -23,15 +23,15 @@ class FirestoreService {
 
         DbConstants.apply {
             val item = hashMapOf(
-                TRACK_NAME_FIELD to track.name,
-                TRACK_AUTHOR_NAME to track.authorName,
-                TRACK_DESCRIPTION_FIELD to track.description,
-                TRACK_PATH_FIELD to track.path,
-                TRACK_IMAGE_PATH_FIELD to track.imagePath,
-                TRACK_GENRES_FIELD to track.genres,
-                TRACK_DISTRIBUTION_PLAN_FIELD to track.distributionPlan,
-                TRACK_DISTRIBUTION_BUNDLE_FIELD to track.distributionBundle,
-                TRACK_SINGLE_PRICE_FIELD to track.singlePrice
+                TRACK_NAME_FIELD to updatedTrack.name,
+                TRACK_AUTHOR_NAME to updatedTrack.authorName,
+                TRACK_DESCRIPTION_FIELD to updatedTrack.description,
+                TRACK_PATH_FIELD to updatedTrack.path,
+                TRACK_IMAGE_PATH_FIELD to updatedTrack.imagePath,
+                TRACK_GENRES_FIELD to updatedTrack.genres,
+                TRACK_DISTRIBUTION_PLAN_FIELD to updatedTrack.distributionPlan,
+                TRACK_DISTRIBUTION_BUNDLE_FIELD to updatedTrack.distributionBundle,
+                TRACK_SINGLE_PRICE_FIELD to updatedTrack.singlePrice
             )
             try {
                 val id = db.collection(TRACK_COLLECTION).add(item).await().id
@@ -41,8 +41,12 @@ class FirestoreService {
                 Log.d(TAG, "Error uploading file: $cause")
             }
         }
+        Log.d(TAG, "returning track $track")
         return updatedTrack
     }
+
+    suspend fun getTrackById(id: String): Track? =
+        db.collection(DbConstants.TRACK_COLLECTION).document(id).get().await().toObject()
 
     suspend fun getTracksQuery(queryParams: Map<String, String>): List<Track> =
         getCollectionQuery(DbConstants.TRACK_COLLECTION, queryParams)

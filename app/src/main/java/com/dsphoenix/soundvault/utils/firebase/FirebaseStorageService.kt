@@ -25,16 +25,17 @@ class FirebaseStorageService {
             val storageRef = storage.reference
             storageRef.child(track.path!!).putFile(track.uri!!).await()
             storageRef.child(track.imagePath!!).putFile(track.imageUri!!).await()
-        }
-        catch (cause: IllegalStateException) {
+        } catch (cause: IllegalStateException) {
             Log.d(TAG, "all path and URI fields should not be null")
             Log.d(TAG, cause.toString())
-        }
-        catch (cause: StorageException) {
+        } catch (cause: StorageException) {
             Log.d(TAG, "error uploading file:")
             Log.d(TAG, cause.toString())
         }
     }
+
+    suspend fun getTrackImageUri(path: String) =
+        storage.reference.child(path).downloadUrl.await().toString()
 
     private fun assertNotNull(vararg args: Any?) {
         args.map { checkNotNull(it) }
