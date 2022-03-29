@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:paddingStart="24dp"
     android:paddingEnd="24dp">
 
@@ -50,14 +50,13 @@
             android:id="@+id/tv_genres"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:maxLines="1"
             android:layout_marginStart="10dp"
             android:layout_marginBottom="5dp"
-            app:layout_constraintBottom_toBottomOf="@id/iv_track_cover"
-            app:layout_constraintStart_toStartOf="@id/iv_track_cover"
-            android:textColor="?colorAccent"
+            android:maxLines="1"
             android:text="Rock, Alternative, Nu-metal"
-            />
+            android:textColor="?colorAccent"
+            app:layout_constraintBottom_toBottomOf="@id/iv_track_cover"
+            app:layout_constraintStart_toStartOf="@id/iv_track_cover" />
 
         <TextView
             android:id="@+id/tv_track_name"
@@ -188,7 +187,8 @@
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toStartOf="@id/ib_next_button"
             app:layout_constraintStart_toEndOf="@id/ib_previous_button"
-            app:layout_constraintTop_toBottomOf="@id/progressBar" />
+            app:layout_constraintTop_toBottomOf="@id/progressBar"
+            app:tint="@color/dark_gray" />
 
         <ImageButton
             android:id="@+id/ib_next_button"

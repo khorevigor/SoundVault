@@ -25,6 +25,10 @@ class AudioRepository @Inject constructor(
         emit(track.imagePath?.let { firebaseStorage.getTrackImageUri(it) })
     }
 
+    fun getTrackAudioRef(track: Track) = flow {
+        emit(track.path?.let { firebaseStorage.getTrackAudioUri(it) })
+    }
+
     fun getTracks(queryParams: Map<String, String>? = null): Flow<List<Track>> = flow {
         if (tracks.isNullOrEmpty()) {
             val query = queryParams?.toMutableMap() ?: mutableMapOf()

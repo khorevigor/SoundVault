@@ -37,6 +37,9 @@ class FirebaseStorageService {
     suspend fun getTrackImageUri(path: String) =
         storage.reference.child(path).downloadUrl.await().toString()
 
+    suspend fun getTrackAudioUri(path: String) =
+        storage.reference.child(path).downloadUrl.await().toString()
+
     private fun assertNotNull(vararg args: Any?) {
         args.map { checkNotNull(it) }
     }
