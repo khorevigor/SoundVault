@@ -17,8 +17,6 @@ class TrackDetailsFragment :
     ViewBindingFragment<TrackDetailsFragmentBinding>(TrackDetailsFragmentBinding::inflate) {
     private val viewModel: TrackDetailsViewModel by activityViewModels()
 
-    private var audioUri: String? = null
-
     @Inject
     lateinit var mediaPlayer: MediaPlayer
 
@@ -34,12 +32,7 @@ class TrackDetailsFragment :
                 tvAuthorName.text = track.authorName
                 tvTrackName.text = track.name
                 tvGenres.text = track.genres?.joinToString(", ") { it }
-            }
-            viewModel.imageRef.observe(viewLifecycleOwner) { ref ->
-                ref?.let { ivTrackCover.loadImage(requireContext(), it) }
-            }
-            viewModel.audioRef.observe(viewLifecycleOwner) { ref ->
-                ref?.let { audioUri = it }
+                track.imagePath?.let { ivTrackCover.loadImage(requireContext(), it) }
             }
         }
         binding.ibPlayButton.setOnClickListener {
@@ -56,10 +49,7 @@ class TrackDetailsFragment :
     }
 
     private fun playAudio() {
-        audioUri?.let {
-            mediaPlayer.setTrackUrl(it)
-            mediaPlayer.playTrack()
-        }
+        viewModel.track.value?.let { mediaPlayer.setTrackToPlay(it) }
     }
 
     private fun togglePlayButton(isPlaying: Boolean) {
@@ -90,7 +80,10 @@ class TrackDetailsFragment :
         }
     }
 
+    // ???
+    // Might be better to make Track parcelable and use it instead
     companion object {
+        const val NAVIGATION_TAG = "TrackDetailsFragment"
         private const val TRACK_ID_STRING_KEY = "TRACK_ID"
         fun createInstance(trackId: String) = TrackDetailsFragment().apply {
             arguments = Bundle().apply {

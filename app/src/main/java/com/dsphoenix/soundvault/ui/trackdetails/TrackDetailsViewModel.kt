@@ -16,9 +16,6 @@ class TrackDetailsViewModel @Inject constructor(
     private val _track = _trackId.flatMapLatest { audioRepository.getTrack(it) }
 
     val track = _track.asLiveData()
-    val imageRef = _track.flatMapLatest { audioRepository.getTrackImageRef(it) }.asLiveData()
-
-    val audioRef = _track.flatMapLatest { audioRepository.getTrackAudioRef(it) }.asLiveData()
 
     fun setTrackId(id: String) {
         _trackId.value = id

@@ -7,6 +7,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.dsphoenix.soundvault.R
+import com.dsphoenix.soundvault.data.model.Track
 import com.dsphoenix.soundvault.databinding.HomeScreenFragmentBinding
 import com.dsphoenix.soundvault.ui.MainActivity
 import com.dsphoenix.soundvault.utils.navigation.NavigationController
@@ -18,7 +19,7 @@ class HomeFragment : ViewBindingFragment<HomeScreenFragmentBinding>(HomeScreenFr
 
     private val viewModel: HomeViewModel by viewModels()
 
-    var onTrackClickListener: ((String) -> Unit)? = null
+    var onTrackClickListener: ((Track) -> Unit)? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setupView()
@@ -44,6 +45,6 @@ class HomeFragment : ViewBindingFragment<HomeScreenFragmentBinding>(HomeScreenFr
     }
 
     companion object {
-        const val navigationTag = "HomeFragment"
+        const val NAVIGATION_TAG = "HomeFragment"
     }
 }

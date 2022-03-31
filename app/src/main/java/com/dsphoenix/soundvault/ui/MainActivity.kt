@@ -6,7 +6,9 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import com.bumptech.glide.Glide
 import com.dsphoenix.soundvault.R
+import com.dsphoenix.soundvault.data.model.Track
 import com.dsphoenix.soundvault.databinding.ActivityMainBinding
 import com.dsphoenix.soundvault.ui.homescreen.HomeFragment
 import com.dsphoenix.soundvault.ui.searchscreen.SearchFragment
@@ -14,6 +16,7 @@ import com.dsphoenix.soundvault.ui.trackdetails.TrackDetailsFragment
 import com.dsphoenix.soundvault.ui.uploadscreen.CreateTrackFragment
 import com.dsphoenix.soundvault.ui.userscreen.UserProfileFragment
 import com.dsphoenix.soundvault.utils.TAG
+import com.dsphoenix.soundvault.utils.mediaplayer.MediaPlayer
 import com.dsphoenix.soundvault.utils.navigation.NavigationController
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
@@ -28,6 +31,9 @@ private const val BACKSTACK_ROOT_FRAGMENT_TAG = "root_fragment"
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+
+    @Inject
+    lateinit var mediaPlayer: MediaPlayer
 
     @Inject
     lateinit var navigationController: NavigationController
@@ -52,11 +58,74 @@ class MainActivity : AppCompatActivity() {
         }
 
         setupView()
-        initializeNavigationBar()
     }
 
     private fun setupView() {
-        binding.tvToolbarText.text = "Greetings"
+        initializeNavigationBar()
+
+        binding.apply {
+            tvToolbarText.text = "Greetings"
+
+            mediaPlayer.currentTrack.observe(this@MainActivity) { track ->
+                Glide.with(this@MainActivity)
+                    .load(track.imageUri)
+                    .placeholder(R.drawable.ic_music_note)
+                    .into(ivTrackCover)
+
+                tvTrackName.text = getString(R.string.track_viewholder_title).format(track.authorName, track.name)
+            }
+
+            mediaPlayer.isPlaying.observe(this@MainActivity) { playing ->
+                if (playing != null) {
+                    togglePlayButton(playing)
+                    if (playing && !isTrackDetailsScreenVisible()) {
+                        layoutMediaPlayer.visibility = View.VISIBLE
+                    }
+                }
+            }
+
+            mediaPlayer.onCompletionCallback = ::hidePlayerLayout
+
+            layoutMediaPlayer.setOnClickListener { navigateToTrackDetails(mediaPlayer.currentTrack.value?.id as String) }
+        }
+    }
+
+    private fun playTrack(track: Track) {
+        mediaPlayer.setTrackToPlay(track)
+    }
+
+    private fun togglePlayButton(isPlaying: Boolean) {
+        if (isPlaying) {
+            setupPauseButton()
+        } else {
+            setupPlayButton()
+        }
+    }
+
+    private fun setupPlayButton() {
+        binding.apply {
+            ivPlayPause.setImageResource(R.drawable.ic_play)
+            ivPlayPause.setOnClickListener {
+                mediaPlayer.resume()
+            }
+        }
+    }
+
+    private fun setupPauseButton() {
+        binding.apply {
+            ivPlayPause.setImageResource(R.drawable.ic_pause)
+            ivPlayPause.setOnClickListener {
+                mediaPlayer.pause()
+            }
+        }
+    }
+
+    private fun hidePlayerLayout() {
+        binding.layoutMediaPlayer.visibility = View.GONE
+    }
+
+    private fun showPlayerLayout() {
+        binding.layoutMediaPlayer.visibility = View.VISIBLE
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -70,7 +139,7 @@ class MainActivity : AppCompatActivity() {
                 signOutActiveUser()
                 true
             }
-            R.id.profile_option-> {
+            R.id.profile_option -> {
                 navigateToUserProfile()
                 true
             }
@@ -79,7 +148,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initializeNavigationBar() {
-        val navigationView: BottomNavigationView = findViewById(R.id.bottomNavigationBar)
+        val navigationView: BottomNavigationView = findViewById(R.id.bottom_navigation_bar)
         navigationView.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.navigation_home -> navigateToHomeScreen()
@@ -111,8 +180,7 @@ class MainActivity : AppCompatActivity() {
             val currentUserUid = FirebaseAuth.getInstance().currentUser?.uid.toString()
             Log.d(TAG, "User with UID $currentUserUid authenticated successfully")
             navigateToHomeScreen()
-        }
-        else {
+        } else {
             if (response == null) {
                 Log.d(TAG, "User cancelled sign-in flow")
                 moveTaskToBack(true)
@@ -126,7 +194,7 @@ class MainActivity : AppCompatActivity() {
     private fun signOutActiveUser() {
         AuthUI.getInstance()
             .signOut(this)
-            .addOnCompleteListener{
+            .addOnCompleteListener {
                 Log.d(TAG, "User signed out")
             }
         startSignInFlow()
@@ -140,34 +208,52 @@ class MainActivity : AppCompatActivity() {
     private fun navigateToUploadScreen() {
         showToolbarAndNavBar()
         navigationController.popBackStack()
-        navigationController.replaceFragment(CreateTrackFragment(), backStackTag = BACKSTACK_ROOT_FRAGMENT_TAG)
+        navigationController.replaceFragment(
+            CreateTrackFragment(),
+            backStackTag = BACKSTACK_ROOT_FRAGMENT_TAG
+        )
     }
 
     private fun navigateToHomeScreen() {
         showToolbarAndNavBar()
         navigationController.popBackStack()
         val fragment = HomeFragment().apply {
-            onTrackClickListener = ::navigateToTrackDetails
+            onTrackClickListener = ::playTrack
         }
-        navigationController.replaceFragment(fragment, tag = HomeFragment.navigationTag, backStackTag = BACKSTACK_ROOT_FRAGMENT_TAG)
+        navigationController.replaceFragment(
+            fragment,
+            tag = HomeFragment.NAVIGATION_TAG,
+            backStackTag = BACKSTACK_ROOT_FRAGMENT_TAG
+        )
     }
 
     private fun navigateToSearchScreen() {
         showToolbarAndNavBar()
         navigationController.popBackStack()
-        navigationController.replaceFragment(SearchFragment(), backStackTag = BACKSTACK_ROOT_FRAGMENT_TAG)
+        navigationController.replaceFragment(
+            SearchFragment(),
+            backStackTag = BACKSTACK_ROOT_FRAGMENT_TAG
+        )
     }
 
     private fun navigateToUserProfile() {
         hideToolbarAndNavbar()
         navigationController.popBackStack()
-        navigationController.replaceFragment(UserProfileFragment(), backStackTag = BACKSTACK_ROOT_FRAGMENT_TAG)
+        navigationController.replaceFragment(
+            UserProfileFragment(),
+            backStackTag = BACKSTACK_ROOT_FRAGMENT_TAG
+        )
     }
 
     private fun navigateToTrackDetails(trackId: String) {
         hideToolbarAndNavbar()
+        hidePlayerLayout()
         navigationController.popBackStack()
-        navigationController.replaceFragment(TrackDetailsFragment.createInstance(trackId), backStackTag = BACKSTACK_ROOT_FRAGMENT_TAG)
+        navigationController.replaceFragment(
+            TrackDetailsFragment.createInstance(trackId),
+            tag = TrackDetailsFragment.NAVIGATION_TAG,
+            backStackTag = BACKSTACK_ROOT_FRAGMENT_TAG
+        )
     }
 
     private fun hideToolbarAndNavbar() {
@@ -180,11 +266,25 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNavigationBar.visibility = View.VISIBLE
     }
 
+    private fun isHomeScreenVisible(): Boolean {
+        val homeFragment = navigationController.findFragmentByTag(HomeFragment.NAVIGATION_TAG)
+        return homeFragment == null || !homeFragment.isVisible
+    }
+
+    private fun isTrackDetailsScreenVisible(): Boolean {
+        val trackDetailsFragment = navigationController.findFragmentByTag(TrackDetailsFragment.NAVIGATION_TAG)
+        return trackDetailsFragment != null && trackDetailsFragment.isVisible
+    }
+
     override fun onBackPressed() {
-        val homeFragment = navigationController.findFragmentByTag(HomeFragment.navigationTag)
-        if (navigationController.backStackEntryCount > 1)
+        if (isTrackDetailsScreenVisible()) {
+            showPlayerLayout()
+        }
+
+        if (navigationController.backStackEntryCount > 1) {
             navigationController.popBackStack()
-        else if (homeFragment == null || !homeFragment.isVisible) {
+        }
+        else if (isHomeScreenVisible()) {
             binding.bottomNavigationBar.selectedItemId = R.id.navigation_home
             navigateToHomeScreen()
         } else {

@@ -13,7 +13,7 @@ class TracksAdapter : RecyclerView.Adapter<TracksAdapter.ViewHolder>() {
 
     private var items: List<Track> = emptyList()
 
-    var onItemClickListener: ((String) -> Unit)? = null
+    var onItemClickListener: ((Track) -> Unit)? = null
 
     private fun getItem(position: Int) = items[position]
     override fun getItemCount() = items.size
@@ -38,10 +38,10 @@ class TracksAdapter : RecyclerView.Adapter<TracksAdapter.ViewHolder>() {
         items = newItems
     }
 
-    class ViewHolder(private val binding: TrackViewHolderBinding, private val listener: ((String) -> Unit)?): RecyclerView.ViewHolder(binding.root) {
+    class ViewHolder(private val binding: TrackViewHolderBinding, private val listener: ((Track) -> Unit)?): RecyclerView.ViewHolder(binding.root) {
         fun bind(track: Track) {
             binding.apply {
-                root.setOnClickListener { listener?.invoke(track.id as String) }
+                root.setOnClickListener { listener?.invoke(track) }
                 tvName.text = root.context.getString(
                     R.string.track_viewholder_title,
                     track.authorName,

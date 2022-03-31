@@ -31,8 +31,71 @@
         app:layout_constraintTop_toBottomOf="@id/toolbar"
         tools:layout="@layout/home_screen_fragment" />
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_media_player"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        app:layout_constraintBottom_toTopOf="@id/bottom_navigation_bar"
+        android:background="@drawable/rounded_corners_background_shape"
+        android:backgroundTint="@color/dark_gray"
+        android:layout_marginHorizontal="10dp"
+        android:padding="5dp"
+        android:visibility="gone"
+        tools:visibility="visible"
+        >
+
+        <ImageView
+            android:id="@+id/iv_track_cover"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:src="@drawable/ic_music_note"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            />
+
+        <TextView
+            android:id="@+id/tv_track_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:ellipsize="end"
+            style="@style/Header.Small"
+            android:layout_marginStart="10dp"
+            app:layout_constraintStart_toEndOf="@id/iv_track_cover"
+            app:layout_constraintEnd_toStartOf="@id/iv_like"
+            app:layout_constraintTop_toTopOf="@id/iv_like"
+            app:layout_constraintBottom_toBottomOf="@id/iv_like"
+            tools:text="Linkin park - Morning After"
+            />
+
+        <ImageView
+            android:id="@+id/iv_like"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:src="@drawable/ic_like_border"
+            android:padding="5dp"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintTop_toTopOf="@id/iv_play_pause"
+            app:layout_constraintBottom_toBottomOf="@id/iv_play_pause"
+            app:layout_constraintEnd_toStartOf="@id/iv_play_pause"
+            app:tint="@color/light_gray" />
+
+        <ImageView
+            android:id="@+id/iv_play_pause"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:src="@drawable/ic_play"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:tint="@color/light_gray" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    
     <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNavigationBar"
+        android:id="@+id/bottom_navigation_bar"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:background="@drawable/black_to_transparent_gradient"

@@ -1,6 +1,5 @@
 package com.dsphoenix.soundvault.data
 
-import android.util.Log
 import com.dsphoenix.soundvault.data.model.Track
 import com.dsphoenix.soundvault.utils.constants.DbConstants
 import com.dsphoenix.soundvault.utils.constants.DistributionPlan
@@ -21,14 +20,6 @@ class AudioRepository @Inject constructor(
         firebaseStorage.uploadTrack(updatedTrack)
     }
 
-    fun getTrackImageRef(track: Track) = flow {
-        emit(track.imagePath?.let { firebaseStorage.getTrackImageUri(it) })
-    }
-
-    fun getTrackAudioRef(track: Track) = flow {
-        emit(track.path?.let { firebaseStorage.getTrackAudioUri(it) })
-    }
-
     fun getTracks(queryParams: Map<String, String>? = null): Flow<List<Track>> = flow {
         if (tracks.isNullOrEmpty()) {
             val query = queryParams?.toMutableMap() ?: mutableMapOf()
@@ -36,7 +27,12 @@ class AudioRepository @Inject constructor(
                 query[DbConstants.TRACK_DISTRIBUTION_PLAN_FIELD] =
                     DistributionPlan.FREE_FOR_ALL.toString()
             }
-            tracks = firestoreService.getTracksQuery(query)
+            val tracksWithNoPaths = firestoreService.getTracksQuery(query)
+            tracks = tracksWithNoPaths.map { track ->
+                val audioUrl = track.path?.let { path -> firebaseStorage.getTrackAudioUri(path) }
+                val imageUrl = track.imagePath?.let { path -> firebaseStorage.getTrackImageUri(path) }
+                track.copy(path = audioUrl, imagePath = imageUrl)
+            }
         }
         emit(tracks)
     }
@@ -44,7 +40,10 @@ class AudioRepository @Inject constructor(
     fun getTrack(id: String): Flow<Track> = flow {
         var track = tracks.find { it.id == id }
         if (track == null) {
-            track = firestoreService.getTrackById(id) as Track
+            val incompleteTrack = firestoreService.getTrackById(id) as Track
+            val audioUrl = incompleteTrack.path?.let { path -> firebaseStorage.getTrackAudioUri(path) }
+            val imageUrl = incompleteTrack.imagePath?.let { path -> firebaseStorage.getTrackImageUri(path) }
+            track = incompleteTrack.copy(path = audioUrl, imagePath = imageUrl)
         }
         emit(track)
     }
