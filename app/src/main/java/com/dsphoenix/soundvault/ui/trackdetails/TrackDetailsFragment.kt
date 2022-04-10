@@ -11,6 +11,7 @@ import com.dsphoenix.soundvault.utils.mediaplayer.MediaPlayer
 import com.dsphoenix.soundvault.utils.viewbinding.ViewBindingFragment
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import kotlin.math.roundToInt
 
 @AndroidEntryPoint
 class TrackDetailsFragment :
@@ -27,6 +28,7 @@ class TrackDetailsFragment :
     }
 
     private fun setupView() {
+        Log.d(TAG, "${binding.progressBar.min}, ${binding.progressBar.max}")
         binding.apply {
             viewModel.track.observe(viewLifecycleOwner) { track ->
                 tvAuthorName.text = track.authorName
@@ -34,7 +36,18 @@ class TrackDetailsFragment :
                 tvGenres.text = track.genres?.joinToString(", ") { it }
                 track.imagePath?.let { ivTrackCover.loadImage(requireContext(), it) }
             }
+
+            mediaPlayer.trackCurrentPosition.observe(viewLifecycleOwner) {
+                tvDurationCurrent.text = it.toFormattedTime()
+            }
+
+            mediaPlayer.trackProgress.observe(viewLifecycleOwner) {
+                progressBar.progress = it
+            }
+
+            tvDurationTotal.text = mediaPlayer.duration.toFormattedTime()
         }
+
         binding.ibPlayButton.setOnClickListener {
             Log.d(TAG, "image button click listener called. playing audio")
             playAudio()
@@ -78,6 +91,16 @@ class TrackDetailsFragment :
                 mediaPlayer.pause()
             }
         }
+    }
+
+    private fun Int.toFormattedTime(): String {
+        val mins = this / 60000
+        val secs = ((this % 60000).toDouble() / 1000).toInt()
+        return context?.getString(
+            R.string.time_mm_ss_format,
+            mins,
+            if (secs < 10) "0$secs" else secs
+        ) ?: ""
     }
 
     // ???

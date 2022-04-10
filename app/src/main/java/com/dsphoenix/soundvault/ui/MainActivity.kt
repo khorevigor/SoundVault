@@ -68,7 +68,7 @@ class MainActivity : AppCompatActivity() {
 
             mediaPlayer.currentTrack.observe(this@MainActivity) { track ->
                 Glide.with(this@MainActivity)
-                    .load(track.imageUri)
+                    .load(track.imagePath)
                     .placeholder(R.drawable.ic_music_note)
                     .into(ivTrackCover)
 
@@ -79,6 +79,9 @@ class MainActivity : AppCompatActivity() {
                 if (playing != null) {
                     togglePlayButton(playing)
                     if (playing && !isTrackDetailsScreenVisible()) {
+                        mediaPlayer.trackProgress.observe(this@MainActivity) {
+                            progressBar.progress = if (it >= 0) it else 0
+                        }
                         layoutMediaPlayer.visibility = View.VISIBLE
                     }
                 }
@@ -122,6 +125,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun hidePlayerLayout() {
         binding.layoutMediaPlayer.visibility = View.GONE
+        mediaPlayer.trackProgress.removeObservers(this)
     }
 
     private fun showPlayerLayout() {

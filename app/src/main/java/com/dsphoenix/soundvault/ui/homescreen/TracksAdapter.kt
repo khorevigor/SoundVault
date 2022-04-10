@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.dsphoenix.soundvault.R
 import com.dsphoenix.soundvault.data.model.Track
 import com.dsphoenix.soundvault.databinding.TrackViewHolderBinding
@@ -47,6 +48,8 @@ class TracksAdapter : RecyclerView.Adapter<TracksAdapter.ViewHolder>() {
                     track.authorName,
                     track.name
                 )
+
+                Glide.with(root.context).load(track.imagePath).into(ivCover)
 
                 if (track.genres.isNullOrEmpty())
                     tvGenres.visibility = View.GONE

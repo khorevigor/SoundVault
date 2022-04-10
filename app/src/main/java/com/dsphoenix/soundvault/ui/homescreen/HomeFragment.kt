@@ -9,8 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dsphoenix.soundvault.R
 import com.dsphoenix.soundvault.data.model.Track
 import com.dsphoenix.soundvault.databinding.HomeScreenFragmentBinding
-import com.dsphoenix.soundvault.ui.MainActivity
-import com.dsphoenix.soundvault.utils.navigation.NavigationController
 import com.dsphoenix.soundvault.utils.viewbinding.ViewBindingFragment
 import dagger.hilt.android.AndroidEntryPoint
 
