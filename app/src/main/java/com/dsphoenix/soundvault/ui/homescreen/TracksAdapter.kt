@@ -15,6 +15,7 @@ class TracksAdapter : RecyclerView.Adapter<TracksAdapter.ViewHolder>() {
     private var items: List<Track> = emptyList()
 
     var onItemClickListener: ((Track) -> Unit)? = null
+    var onAddTrackToQueueClickListener: ((Track) -> Unit)? = null
 
     private fun getItem(position: Int) = items[position]
     override fun getItemCount() = items.size
@@ -26,7 +27,7 @@ class TracksAdapter : RecyclerView.Adapter<TracksAdapter.ViewHolder>() {
             false
         )
 
-        return ViewHolder(binding, onItemClickListener)
+        return ViewHolder(binding, onItemClickListener, onAddTrackToQueueClickListener)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -39,10 +40,15 @@ class TracksAdapter : RecyclerView.Adapter<TracksAdapter.ViewHolder>() {
         items = newItems
     }
 
-    class ViewHolder(private val binding: TrackViewHolderBinding, private val listener: ((Track) -> Unit)?): RecyclerView.ViewHolder(binding.root) {
+    class ViewHolder(
+        private val binding: TrackViewHolderBinding,
+        private val trackClickListener: ((Track) -> Unit)?,
+        private val addToQueueClickListener: ((Track) -> Unit)?
+    ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(track: Track) {
             binding.apply {
-                root.setOnClickListener { listener?.invoke(track) }
+                root.setOnClickListener { trackClickListener?.invoke(track) }
+                ibAddToQueue.setOnClickListener { addToQueueClickListener?.invoke(track) }
                 tvName.text = root.context.getString(
                     R.string.track_viewholder_title,
                     track.authorName,
@@ -54,25 +60,25 @@ class TracksAdapter : RecyclerView.Adapter<TracksAdapter.ViewHolder>() {
                 if (track.genres.isNullOrEmpty())
                     tvGenres.visibility = View.GONE
                 else
-                    tvGenres.text = track.genres.joinToString( ", ")
+                    tvGenres.text = track.genres.joinToString(", ")
             }
         }
     }
 }
 
-    class TracksCallback(
-        private val oldList: List<Track>,
-        private val newList: List<Track>
-    ) :
-        DiffUtil.Callback() {
+class TracksCallback(
+    private val oldList: List<Track>,
+    private val newList: List<Track>
+) :
+    DiffUtil.Callback() {
 
-        override fun getOldListSize(): Int = oldList.size
+    override fun getOldListSize(): Int = oldList.size
 
-        override fun getNewListSize(): Int = newList.size
+    override fun getNewListSize(): Int = newList.size
 
-        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
-            oldList[oldItemPosition].name == newList[newItemPosition].name
+    override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
+        oldList[oldItemPosition].name == newList[newItemPosition].name
 
-        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
-            oldList[oldItemPosition] == newList[newItemPosition]
-    }
+    override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
+        oldList[oldItemPosition] == newList[newItemPosition]
+}
