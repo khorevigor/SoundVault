@@ -26,7 +26,7 @@
         android:gravity="start"
         android:maxLines="1"
         app:layout_constraintBottom_toTopOf="@id/tv_genres"
-        app:layout_constraintEnd_toStartOf="@id/tv_rating_value"
+        app:layout_constraintEnd_toStartOf="@id/ib_add_to_queue"
         app:layout_constraintStart_toEndOf="@id/iv_cover"
         app:layout_constraintTop_toTopOf="@id/iv_cover"
         tools:text="Linkin park - Burn it to the ground" />
@@ -41,7 +41,7 @@
         android:textColor="?colorAccent"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="@id/iv_cover"
-        app:layout_constraintEnd_toEndOf="@id/tv_name"
+        app:layout_constraintEnd_toStartOf="@id/tv_rating_value"
         app:layout_constraintStart_toStartOf="@id/tv_name"
         app:layout_constraintTop_toBottomOf="@id/tv_name"
         tools:text="Nu-metal, rock, alternative" />
@@ -49,14 +49,14 @@
     <ImageView
         android:id="@+id/iv_rating_star"
         android:layout_width="0dp"
-        android:layout_height="18dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="15dp"
+        android:layout_height="16dp"
+        android:layout_marginStart="5dp"
         android:src="@drawable/ic_star_filled"
-        app:layout_constraintBottom_toTopOf="@+id/tv_rating_value"
+        app:layout_constraintBottom_toBottomOf="@id/tv_rating_value"
         app:layout_constraintDimensionRatio="1:1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/tv_name"
+        app:layout_constraintStart_toEndOf="@id/tv_rating_value"
+        app:layout_constraintTop_toTopOf="@id/tv_rating_value"
         app:tint="?colorAccent" />
 
     <TextView
@@ -65,9 +65,22 @@
         android:layout_height="wrap_content"
         android:text="4.2"
         android:textColor="?colorAccent"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="@id/iv_rating_star"
-        app:layout_constraintStart_toStartOf="@id/iv_rating_star"
-        app:layout_constraintTop_toBottomOf="@id/iv_rating_star" />
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@id/tv_genres"
+        app:layout_constraintEnd_toStartOf="@id/iv_rating_star"
+        app:layout_constraintStart_toEndOf="@id/tv_genres"
+        app:layout_constraintTop_toTopOf="@id/tv_genres" />
+
+    <ImageButton
+        android:id="@+id/ib_add_to_queue"
+        android:layout_width="30dp"
+        android:layout_height="0dp"
+        android:layout_marginVertical="15dp"
+        android:layout_marginStart="10dp"
+        android:background="@drawable/ic_queue_add"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/tv_name"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

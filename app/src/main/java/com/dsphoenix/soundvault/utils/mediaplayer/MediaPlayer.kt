@@ -13,6 +13,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.isActive
+import java.util.*
 import kotlin.math.roundToInt
 
 class MediaPlayer {
@@ -45,6 +46,7 @@ class MediaPlayer {
 
     private var originalPlaybackList = emptyList<Track>()
     private var playbackList = emptyList<Track>()
+    private var additionalQueue: Queue<Track> = LinkedList()
 
     private var currentIndex: Int = -1
 
@@ -66,15 +68,8 @@ class MediaPlayer {
         }
     }
 
-    fun setTrackToPlay(track: Track) {
-        _currentTrack.value = track
-        _currentTrack.value?.path.let { path ->
-            mediaPlayer.run {
-                reset()
-                setDataSource(path)
-                prepareAsync()
-            }
-        }
+    fun playTrack(track: Track) {
+        setTrackToPlay(track)
         if (playbackList.isNotEmpty()) {
             updateCurrentIndex()
         }
@@ -85,8 +80,8 @@ class MediaPlayer {
         playbackList = tracks
     }
 
-    private fun updateCurrentIndex() {
-        currentIndex = playbackList.indexOf(_currentTrack.value)
+    fun addTrackToQueue(track: Track) {
+        additionalQueue.add(track)
     }
 
     fun pause() {
@@ -103,7 +98,8 @@ class MediaPlayer {
 
     fun playNext() {
         mediaPlayer.stop()
-        setTrackToPlay(next())
+        val track = additionalQueue.poll()
+        setTrackToPlay(track ?: next())
     }
 
     fun playPrev() {
@@ -132,6 +128,17 @@ class MediaPlayer {
         _isLooping.value = mediaPlayer.isLooping
     }
 
+    private fun setTrackToPlay(track: Track) {
+        _currentTrack.value = track
+        _currentTrack.value?.path.let { path ->
+            mediaPlayer.run {
+                reset()
+                setDataSource(path)
+                prepareAsync()
+            }
+        }
+    }
+
     private fun playCurrentFromStart() {
         mediaPlayer.seekTo(0)
     }
@@ -158,11 +165,13 @@ class MediaPlayer {
         }
     }
 
-    private fun next(): Track {
-        return playbackList.getOrElse(++currentIndex) { getFirstOrCurrent() }
+    private fun updateCurrentIndex() {
+        currentIndex = playbackList.indexOf(_currentTrack.value)
     }
 
-    private fun prev(): Track {
-        return playbackList.getOrElse(--currentIndex) { getLastOrCurrent() }
-    }
+    private fun next() = playbackList.getOrElse(++currentIndex) { getFirstOrCurrent() }
+    private fun prev() = playbackList.getOrElse(--currentIndex) { getLastOrCurrent() }
+
+    private fun nextFromQueue() = additionalQueue.poll()
+
 }

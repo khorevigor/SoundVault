@@ -18,6 +18,7 @@ class HomeFragment : ViewBindingFragment<HomeScreenFragmentBinding>(HomeScreenFr
     private val viewModel: HomeViewModel by viewModels()
 
     var onTrackClickListener: ((Track) -> Unit)? = null
+    var onAddToQueueClickListener: ((Track) -> Unit)? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setupView()
@@ -28,13 +29,20 @@ class HomeFragment : ViewBindingFragment<HomeScreenFragmentBinding>(HomeScreenFr
         binding.apply {
             rvTracks.adapter = TracksAdapter()
             val decorator = DividerItemDecoration(requireContext(), RecyclerView.VERTICAL)
-            decorator.setDrawable(ResourcesCompat.getDrawable(resources, R.drawable.divider, null)!!)
+            decorator.setDrawable(
+                ResourcesCompat.getDrawable(
+                    resources,
+                    R.drawable.divider,
+                    null
+                )!!
+            )
             rvTracks.addItemDecoration(decorator)
 
             viewModel.tracks.observe(viewLifecycleOwner) { tracks ->
                 (rvTracks.adapter as TracksAdapter).apply {
                     setData(tracks)
                     onItemClickListener = onTrackClickListener
+                    onAddTrackToQueueClickListener = onAddToQueueClickListener
                 }
             }
 

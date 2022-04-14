@@ -119,7 +119,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun playTrack(track: Track) {
-        mediaPlayer.setTrackToPlay(track)
+        mediaPlayer.playTrack(track)
+    }
+
+    private fun addToPlaybackQueue(track: Track) {
+        mediaPlayer.addTrackToQueue(track)
     }
 
     private fun togglePlayButton(isPlaying: Boolean) {
@@ -248,6 +252,7 @@ class MainActivity : AppCompatActivity() {
         navigationController.popBackStack()
         val fragment = HomeFragment().apply {
             onTrackClickListener = ::playTrack
+            onAddToQueueClickListener = ::addToPlaybackQueue
         }
         navigationController.replaceFragment(
             fragment,

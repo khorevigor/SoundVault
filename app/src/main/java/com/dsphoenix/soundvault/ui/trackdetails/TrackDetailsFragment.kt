@@ -91,7 +91,7 @@ class TrackDetailsFragment :
     }
 
     private fun playAudio() {
-        viewModel.track.value?.let { mediaPlayer.setTrackToPlay(it) }
+        viewModel.track.value?.let { mediaPlayer.playTrack(it) }
     }
 
     private fun togglePlayButton(isPlaying: Boolean) {
