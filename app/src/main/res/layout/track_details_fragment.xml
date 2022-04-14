@@ -163,7 +163,8 @@
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toStartOf="@id/ib_previous_button"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/ib_previous_button" />
+            app:layout_constraintTop_toTopOf="@id/ib_previous_button"
+            />
 
         <ImageButton
             android:id="@+id/ib_previous_button"
@@ -197,12 +198,12 @@
             android:background="@drawable/ic_next"
             app:layout_constraintBottom_toBottomOf="@id/ib_play_button"
             app:layout_constraintDimensionRatio="1:1"
-            app:layout_constraintEnd_toStartOf="@id/ib_repeat_button"
+            app:layout_constraintEnd_toStartOf="@id/ib_looping_button"
             app:layout_constraintStart_toEndOf="@id/ib_play_button"
             app:layout_constraintTop_toTopOf="@id/ib_play_button" />
 
         <ImageButton
-            android:id="@+id/ib_repeat_button"
+            android:id="@+id/ib_looping_button"
             android:layout_width="0dp"
             android:layout_height="20dp"
             android:background="@drawable/ic_repeat"

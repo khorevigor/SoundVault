@@ -42,6 +42,7 @@ class FadingImageView @JvmOverloads constructor(
             .into(object : CustomTarget<Bitmap>(bitmap.width, bitmap.height){
                 override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
                     bitmap = resource
+                    setupShaders()
                     invalidate()
                 }
                 override fun onLoadCleared(placeholder: Drawable?) {

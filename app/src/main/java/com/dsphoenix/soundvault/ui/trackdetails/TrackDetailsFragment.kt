@@ -1,8 +1,10 @@
 package com.dsphoenix.soundvault.ui.trackdetails
 
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import com.dsphoenix.soundvault.R
 import com.dsphoenix.soundvault.databinding.TrackDetailsFragmentBinding
@@ -11,7 +13,6 @@ import com.dsphoenix.soundvault.utils.mediaplayer.MediaPlayer
 import com.dsphoenix.soundvault.utils.viewbinding.ViewBindingFragment
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
-import kotlin.math.roundToInt
 
 @AndroidEntryPoint
 class TrackDetailsFragment :
@@ -20,6 +21,8 @@ class TrackDetailsFragment :
 
     @Inject
     lateinit var mediaPlayer: MediaPlayer
+
+    var navigateBackButtonClickListener: (() -> Unit)? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val trackId = arguments?.getString(TRACK_ID_STRING_KEY)
@@ -30,11 +33,15 @@ class TrackDetailsFragment :
     private fun setupView() {
         Log.d(TAG, "${binding.progressBar.min}, ${binding.progressBar.max}")
         binding.apply {
-            viewModel.track.observe(viewLifecycleOwner) { track ->
+            mediaPlayer.currentTrack.observe(viewLifecycleOwner) { track ->
                 tvAuthorName.text = track.authorName
                 tvTrackName.text = track.name
                 tvGenres.text = track.genres?.joinToString(", ") { it }
                 track.imagePath?.let { ivTrackCover.loadImage(requireContext(), it) }
+            }
+
+            mediaPlayer.trackDuration.observe(viewLifecycleOwner) {
+                tvDurationTotal.text = it.toFormattedTime()
             }
 
             mediaPlayer.trackCurrentPosition.observe(viewLifecycleOwner) {
@@ -45,16 +52,38 @@ class TrackDetailsFragment :
                 progressBar.progress = it
             }
 
-            tvDurationTotal.text = mediaPlayer.duration.toFormattedTime()
-        }
+            mediaPlayer.isShuffled.observe(viewLifecycleOwner) {
+                ibShuffleButton.backgroundTintList = ColorStateList.valueOf(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        if (it) R.color.rose else R.color.light_gray
+                    )
+                )
+            }
 
-        binding.ibPlayButton.setOnClickListener {
-            Log.d(TAG, "image button click listener called. playing audio")
-            playAudio()
+            mediaPlayer.isLooping.observe(viewLifecycleOwner) {
+                ibLoopingButton.backgroundTintList = ColorStateList.valueOf(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        if (it) R.color.rose else R.color.light_gray
+                    )
+                )
+            }
+
+            ibPlayButton.setOnClickListener { playAudio() }
+
+            ibShuffleButton.setOnClickListener { mediaPlayer.toggleShuffle() }
+
+            ibPreviousButton.setOnClickListener { mediaPlayer.playPrev() }
+
+            ibNextButton.setOnClickListener { mediaPlayer.playNext() }
+
+            ibLoopingButton.setOnClickListener { mediaPlayer.toggleLooping() }
+
+            backButton.setOnClickListener { navigateBackButtonClickListener?.invoke() }
         }
 
         mediaPlayer.isPlaying.observe(viewLifecycleOwner) {
-            Log.d(TAG, "isPlaying toggled, calling listener with $it")
             if (it != null) {
                 togglePlayButton(it)
             }

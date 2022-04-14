@@ -6,8 +6,13 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleCoroutineScope
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.bumptech.glide.Glide
 import com.dsphoenix.soundvault.R
+import com.dsphoenix.soundvault.data.AudioRepository
 import com.dsphoenix.soundvault.data.model.Track
 import com.dsphoenix.soundvault.databinding.ActivityMainBinding
 import com.dsphoenix.soundvault.ui.homescreen.HomeFragment
@@ -27,6 +32,8 @@ import com.google.firebase.appcheck.FirebaseAppCheck
 import com.google.firebase.appcheck.safetynet.SafetyNetAppCheckProviderFactory
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 private const val BACKSTACK_ROOT_FRAGMENT_TAG = "root_fragment"
@@ -40,6 +47,9 @@ class MainActivity : AppCompatActivity() {
 
     @Inject
     lateinit var navigationController: NavigationController
+
+    @Inject
+    lateinit var audioRepository: AudioRepository
 
     private val signInLauncher = registerForActivityResult(
         FirebaseAuthUIActivityResultContract()
@@ -81,7 +91,8 @@ class MainActivity : AppCompatActivity() {
                     .placeholder(R.drawable.ic_music_note)
                     .into(ivTrackCover)
 
-                tvTrackName.text = getString(R.string.track_viewholder_title).format(track.authorName, track.name)
+                tvTrackName.text =
+                    getString(R.string.track_viewholder_title).format(track.authorName, track.name)
             }
 
             mediaPlayer.isPlaying.observe(this@MainActivity) { playing ->
@@ -97,6 +108,11 @@ class MainActivity : AppCompatActivity() {
             }
 
             mediaPlayer.onCompletionCallback = ::hidePlayerLayout
+            lifecycleScope.launch {
+                repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    audioRepository.tracks.collect { mediaPlayer.setTracksQueue(it) }
+                }
+            }
 
             layoutMediaPlayer.setOnClickListener { navigateToTrackDetails(mediaPlayer.currentTrack.value?.id as String) }
         }
@@ -263,7 +279,9 @@ class MainActivity : AppCompatActivity() {
         hidePlayerLayout()
         navigationController.popBackStack()
         navigationController.replaceFragment(
-            TrackDetailsFragment.createInstance(trackId),
+            TrackDetailsFragment.createInstance(trackId).apply {
+                navigateBackButtonClickListener = ::onBackPressed
+            },
             tag = TrackDetailsFragment.NAVIGATION_TAG,
             backStackTag = BACKSTACK_ROOT_FRAGMENT_TAG
         )
@@ -285,7 +303,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun isTrackDetailsScreenVisible(): Boolean {
-        val trackDetailsFragment = navigationController.findFragmentByTag(TrackDetailsFragment.NAVIGATION_TAG)
+        val trackDetailsFragment =
+            navigationController.findFragmentByTag(TrackDetailsFragment.NAVIGATION_TAG)
         return trackDetailsFragment != null && trackDetailsFragment.isVisible
     }
 
@@ -296,8 +315,7 @@ class MainActivity : AppCompatActivity() {
 
         if (navigationController.backStackEntryCount > 1) {
             navigationController.popBackStack()
-        }
-        else if (isHomeScreenVisible()) {
+        } else if (isHomeScreenVisible()) {
             binding.bottomNavigationBar.selectedItemId = R.id.navigation_home
             navigateToHomeScreen()
         } else {
