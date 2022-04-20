@@ -21,24 +21,33 @@ class HomeFragment : ViewBindingFragment<HomeScreenFragmentBinding>(HomeScreenFr
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setupView()
+        viewModel.fetchTracks()
     }
 
     private fun setupView() {
-        binding.rvTracks.adapter = TracksAdapter()
-        val decorator = DividerItemDecoration(requireContext(), RecyclerView.VERTICAL)
-        decorator.setDrawable(ResourcesCompat.getDrawable(resources, R.drawable.divider, null)!!)
-        binding.rvTracks.addItemDecoration(decorator)
+        binding.apply {
+            rvTracks.adapter = TracksAdapter()
+            val decorator = DividerItemDecoration(requireContext(), RecyclerView.VERTICAL)
+            decorator.setDrawable(ResourcesCompat.getDrawable(resources, R.drawable.divider, null)!!)
+            rvTracks.addItemDecoration(decorator)
 
-        viewModel.tracks.observe(viewLifecycleOwner) { tracks ->
-            (binding.rvTracks.adapter as TracksAdapter).apply {
-                setData(tracks)
-                onItemClickListener = onTrackClickListener
+            viewModel.tracks.observe(viewLifecycleOwner) { tracks ->
+                (rvTracks.adapter as TracksAdapter).apply {
+                    setData(tracks)
+                    onItemClickListener = onTrackClickListener
+                }
             }
-        }
-        binding.subButton.setOnClickListener { viewModel.toggleSubscription() }
-        viewModel.user.observe(viewLifecycleOwner) { user ->
-            binding.subButton.text =
-                if (user.hasSubscription == true) "Unsubscribe" else "Subscribe"
+
+            subButton.setOnClickListener { viewModel.toggleSubscription() }
+            viewModel.user.observe(viewLifecycleOwner) { user ->
+                subButton.text =
+                    if (user.hasSubscription == true) "Unsubscribe" else "Subscribe"
+            }
+
+            swipeRefreshLayout.setOnRefreshListener {
+                viewModel.refreshTracks()
+                swipeRefreshLayout.isRefreshing = false
+            }
         }
     }
 
