@@ -12,9 +12,7 @@ class UserRepository @Inject constructor(
     private val firestoreService: FirestoreService
 )
 {
-    suspend fun getUser(uid: String): Flow<User> = flow {
-        emit(fetchUser(uid))
-    }
+    suspend fun getUser(uid: String): User = fetchUser(uid)
 
     suspend fun updateUser(user: User) {
         firestoreService.writeUser(user)

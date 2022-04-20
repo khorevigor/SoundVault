@@ -28,8 +28,8 @@ class UserProfileFragment: ViewBindingFragment<UserProfileFragmentBinding>(UserP
         decorator.setDrawable(ResourcesCompat.getDrawable(resources, R.drawable.divider, null)!!)
         binding.rvTracks.addItemDecoration(decorator)
 
-        viewModel.tracks.observe(viewLifecycleOwner) { tracks ->
-            (binding.rvTracks.adapter as TracksAdapter).setData(tracks)
-        }
+//        viewModel.tracks.observe(viewLifecycleOwner) { tracks ->
+//            (binding.rvTracks.adapter as TracksAdapter).setData(tracks)
+//        }
     }
 }
