@@ -5,6 +5,7 @@ import com.dsphoenix.soundvault.data.model.Track
 import com.dsphoenix.soundvault.data.model.User
 import com.dsphoenix.soundvault.utils.TAG
 import com.dsphoenix.soundvault.utils.constants.DbConstants
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.Query
@@ -19,10 +20,12 @@ class FirestoreService {
         val trackAuthorAndName = "${track.authorName}_${track.name}"
         val remotePath = "audio/$trackAuthorAndName"
         val remoteCoverPath = "image/$trackAuthorAndName"
-        var updatedTrack: Track = track.copy(path = remotePath, imagePath = remoteCoverPath)
+        val trackUploader = FirebaseAuth.getInstance().currentUser?.uid.toString()
+        var updatedTrack: Track = track.copy(path = remotePath, imagePath = remoteCoverPath, uploaderId = trackUploader)
 
         DbConstants.apply {
             val item = hashMapOf(
+                TRACK_UPLOADER_ID to updatedTrack.uploaderId,
                 TRACK_NAME_FIELD to updatedTrack.name,
                 TRACK_AUTHOR_NAME to updatedTrack.authorName,
                 TRACK_DESCRIPTION_FIELD to updatedTrack.description,
