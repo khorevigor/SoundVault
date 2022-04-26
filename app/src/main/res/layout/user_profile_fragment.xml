@@ -29,8 +29,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/save_button"
+        style="@style/BackgroundText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawablePadding="12dp"
+        android:text="@string/save_button"
+        android:visibility="gone"
+        app:drawableEndCompat="@drawable/ic_save"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/iv_track_cover"
+        android:id="@+id/iv_user_avatar"
         android:layout_width="0dp"
         android:layout_height="120dp"
         android:layout_marginTop="40dp"
@@ -41,16 +53,31 @@
         app:layout_constraintTop_toTopOf="parent"
         app:shapeAppearance="@style/CircleImage" />
 
-    <TextView
-        android:id="@+id/tv_track_name"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_upload_avatar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="?colorAccent"
+        android:src="@drawable/ic_up"
+        android:visibility="gone"
+        app:borderWidth="0dp"
+        app:fabCustomSize="48dp"
+        app:layout_constraintBottom_toBottomOf="@id/iv_user_avatar"
+        app:layout_constraintEnd_toEndOf="@id/iv_user_avatar"
+        app:tint="@color/light_gray"
+        tools:visibility="visible" />
+
+    <EditText
+        android:id="@+id/et_user_name"
         style="@style/Header.Small"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:text="Hem Chrisworth"
-        app:layout_constraintEnd_toEndOf="@id/iv_track_cover"
-        app:layout_constraintStart_toStartOf="@id/iv_track_cover"
-        app:layout_constraintTop_toBottomOf="@id/iv_track_cover" />
+        android:backgroundTint="?colorAccent"
+        app:layout_constraintEnd_toEndOf="@id/iv_user_avatar"
+        app:layout_constraintStart_toStartOf="@id/iv_user_avatar"
+        app:layout_constraintTop_toBottomOf="@id/iv_user_avatar" />
 
     <TextView
         android:id="@+id/tv_tracks_label"
@@ -62,7 +89,7 @@
         app:layout_constraintEnd_toStartOf="@id/tv_followers_label"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_track_name" />
+        app:layout_constraintTop_toBottomOf="@id/et_user_name" />
 
     <TextView
         android:id="@+id/tv_tracks_value"

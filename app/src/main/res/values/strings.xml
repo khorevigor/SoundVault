@@ -19,6 +19,7 @@
     <string name="authored_label">Authored</string>
     <string name="back_button">Back</string>
     <string name="edit_button">Edit</string>
+    <string name="save_button">Save</string>
     <string name="profile_option">Profile</string>
     <string name="track_details_option">Track details</string>
     <string name="parkin_link">Parkin Link</string>
