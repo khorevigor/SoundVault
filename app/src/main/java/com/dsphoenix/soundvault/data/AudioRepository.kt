@@ -13,6 +13,7 @@ class AudioRepository @Inject constructor(
     private val firebaseStorage: FirebaseStorageService
 ) {
     private var tracksCache = emptyList<Track>()
+    private var lastQuery = mapOf<String, String>()
 
     suspend fun uploadTrack(track: Track) {
         val updatedTrack = firestoreService.writeTrack(track)
@@ -23,7 +24,7 @@ class AudioRepository @Inject constructor(
     val tracks: SharedFlow<List<Track>> = _tracks
 
     suspend fun fetchTracks(queryParams: Map<String, String>? = null) {
-        if (tracksCache.isNullOrEmpty()) {
+        if (tracksCache.isNullOrEmpty() || queryParams != lastQuery) {
             fetchAndCacheTracks(queryParams)
         }
         _tracks.emit(tracksCache)
@@ -47,6 +48,7 @@ class AudioRepository @Inject constructor(
 
     private suspend fun fetchAndCacheTracks(queryParams: Map<String, String>? = null) {
         val query = queryParams?.toMutableMap() ?: mutableMapOf()
+        lastQuery = query
         if (!isSubscriptionEnabled) {
             query[DbConstants.TRACK_DISTRIBUTION_PLAN_FIELD] =
                 DistributionPlan.FREE_FOR_ALL.toString()
