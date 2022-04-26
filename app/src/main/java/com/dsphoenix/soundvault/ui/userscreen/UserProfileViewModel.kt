@@ -1,5 +1,6 @@
 package com.dsphoenix.soundvault.ui.userscreen
 
+import android.net.Uri
 import androidx.lifecycle.*
 import com.dsphoenix.soundvault.data.AudioRepository
 import com.dsphoenix.soundvault.data.UserRepository
@@ -9,6 +10,7 @@ import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import java.net.URI
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,6 +26,9 @@ class UserProfileViewModel @Inject constructor(
     }
     val user = _user.asLiveData()
 
+    val userName = MutableLiveData<String>()
+    val avatarUri = MutableLiveData<Uri>()
+
     val tracks = audioRepository.tracks.asLiveData()
 
     init {
@@ -33,5 +38,9 @@ class UserProfileViewModel @Inject constructor(
                 audioRepository.fetchTracks(mapOf(DbConstants.TRACK_UPLOADER_ID to uid.value))
             }
         }
+    }
+
+    fun setUserName(name: String) {
+        userName.value = name
     }
 }
