@@ -3,7 +3,6 @@ package com.dsphoenix.soundvault.ui.userscreen
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
-import android.text.InputType
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.res.ResourcesCompat
@@ -53,17 +52,18 @@ class UserProfileFragment: ViewBindingFragment<UserProfileFragmentBinding>(UserP
                 (rvTracks.adapter as TracksAdapter).setData(tracks)
             }
 
-            viewModel.userName.observe(viewLifecycleOwner) { name ->
-                if (name != etUserName.text.toString())
-                    etUserName.setText(name)
-            }
+            viewModel.user.observe(viewLifecycleOwner) { user ->
+                if (user.name != etUserName.text.toString()) {
+                    etUserName.setText(user.name ?: "Placeholder name")
+                }
 
-            viewModel.avatarUri.observe(viewLifecycleOwner) {
-                Glide.with(requireContext()).load(it).into(ivUserAvatar)
+                Glide.with(requireContext()).load(user.avatarUri ?: user.avatarPath).placeholder(R.drawable.hemsworth_icon).into(ivUserAvatar)
             }
 
             editButton.setOnClickListener { enableEditMode() }
-            saveButton.setOnClickListener { disableEditMode() }
+            saveButton.setOnClickListener {
+                viewModel.saveChanges()
+                disableEditMode() }
             fabUploadAvatar.setOnClickListener { pickFileToUpload() }
         }
     }
@@ -108,6 +108,6 @@ class UserProfileFragment: ViewBindingFragment<UserProfileFragmentBinding>(UserP
     }
 
     private fun onImagePicked(uri: Uri) {
-        viewModel.avatarUri.value = uri
+        viewModel.setAvatarUri(uri)
     }
 }

@@ -2,6 +2,7 @@ package com.dsphoenix.soundvault.utils.firebase
 
 import android.util.Log
 import com.dsphoenix.soundvault.data.model.Track
+import com.dsphoenix.soundvault.data.model.User
 import com.dsphoenix.soundvault.utils.TAG
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageException
@@ -34,10 +35,30 @@ class FirebaseStorageService {
         }
     }
 
+    suspend fun uploadUser(user: User) {
+        try {
+            user.apply {
+                assertNotNull(avatarPath, avatarUri)
+            }
+
+            val storageRef = storage.reference
+            storageRef.child(user.avatarPath!!).putFile(user.avatarUri!!).await()
+        } catch (cause: IllegalStateException) {
+            Log.d(TAG, "all path and URI fields should not be null")
+            Log.d(TAG, cause.toString())
+        } catch (cause: StorageException) {
+            Log.d(TAG, "error uploading file:")
+            Log.d(TAG, cause.toString())
+        }
+    }
+
     suspend fun getTrackImageUri(path: String) =
         storage.reference.child(path).downloadUrl.await().toString()
 
     suspend fun getTrackAudioUri(path: String) =
+        storage.reference.child(path).downloadUrl.await().toString()
+
+    suspend fun getUserAvatarUrl(path: String) =
         storage.reference.child(path).downloadUrl.await().toString()
 
     private fun assertNotNull(vararg args: Any?) {

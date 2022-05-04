@@ -17,4 +17,6 @@ object DbConstants {
     const val USERS_COLLECTION = "usersCollection"
     const val USER_UID_FIELD = "uid"
     const val USER_HAS_SUBSCRIPTION_FIELD = "hasSubscription"
+    const val USER_NAME_FIELD = "name"
+    const val USER_AVATAR_PATH_FIELD = "avatarPath"
 }
