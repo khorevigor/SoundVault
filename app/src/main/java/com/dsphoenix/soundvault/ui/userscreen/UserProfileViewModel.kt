@@ -10,7 +10,6 @@ import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import java.net.URI
 import javax.inject.Inject
 
 @HiltViewModel
@@ -19,28 +18,45 @@ class UserProfileViewModel @Inject constructor(
     private val userRepository: UserRepository,
 ) : ViewModel() {
 
-    private val uid: MutableStateFlow<String> = MutableStateFlow(FirebaseAuth.getInstance().currentUser?.uid.toString())
+    private val uid: MutableStateFlow<String> =
+        MutableStateFlow(FirebaseAuth.getInstance().currentUser?.uid.toString())
 
-    private val _user: Flow<User> = uid.flatMapLatest {
-        flow { userRepository.getUser(it) }
-    }
-    val user = _user.asLiveData()
+    private val _user = MutableLiveData<User>()
+    val user: LiveData<User> = _user
 
-    val userName = MutableLiveData<String>()
-    val avatarUri = MutableLiveData<Uri>()
+    private var isUserChanged = false
 
     val tracks = audioRepository.tracks.asLiveData()
 
     init {
         viewModelScope.launch {
-            _user.collect {
-                AudioRepository.isSubscriptionEnabled = it.hasSubscription ?: false
-                audioRepository.fetchTracks(mapOf(DbConstants.TRACK_UPLOADER_ID to uid.value))
+            uid.collect {
+                val user = userRepository.getUser(it)
+                _user.postValue(user)
+                AudioRepository.isSubscriptionEnabled = user.hasSubscription ?: false
+                audioRepository.fetchTracks(mapOf(DbConstants.TRACK_UPLOADER_ID to it))
             }
         }
     }
 
     fun setUserName(name: String) {
-        userName.value = name
+        _user.value = _user.value?.copy(name = name)
+        isUserChanged = true
+    }
+
+    fun setAvatarUri(uri: Uri) {
+        _user.value = _user.value?.copy(avatarUri = uri)
+        isUserChanged = true
+    }
+
+    fun saveChanges() {
+        if (isUserChanged) {
+            _user.value?.let {
+                viewModelScope.launch {
+                    isUserChanged = false
+                    userRepository.updateUser(it)
+                }
+            }
+        }
     }
 }

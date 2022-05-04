@@ -1,6 +1,7 @@
 package com.dsphoenix.soundvault.utils.di
 
 import com.dsphoenix.soundvault.data.UserRepository
+import com.dsphoenix.soundvault.utils.firebase.FirebaseStorageService
 import com.dsphoenix.soundvault.utils.firebase.FirestoreService
 import dagger.Module
 import dagger.Provides
@@ -13,6 +14,7 @@ object UserRepositoryModule {
 
     @Provides
     fun provideUserRepository(
-        firestoreService: FirestoreService
-    ): UserRepository = UserRepository(firestoreService)
+        firestoreService: FirestoreService,
+        firebaseStorageService: FirebaseStorageService
+    ): UserRepository = UserRepository(firestoreService, firebaseStorageService)
 }

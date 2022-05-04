@@ -67,10 +67,21 @@ class FirestoreService {
         return user
     }
 
-    suspend fun writeUser(user: User) {
+    suspend fun writeUser(user: User): User {
         try {
             checkNotNull(user.uid)
-            db.collection(DbConstants.USERS_COLLECTION).document(user.uid).set(user).await()
+            val avatarPath = "image/users/${user.uid}"
+            val updatedUser = user.copy(avatarPath = avatarPath)
+            DbConstants.apply {
+                val item = hashMapOf(
+                    USER_NAME_FIELD to updatedUser.name,
+                    USER_AVATAR_PATH_FIELD to updatedUser.avatarPath,
+                    USER_HAS_SUBSCRIPTION_FIELD to updatedUser.hasSubscription,
+                    USER_UID_FIELD to updatedUser.uid
+                )
+                db.collection(USERS_COLLECTION).document(updatedUser.uid!!).set(item).await()
+            }
+            return updatedUser
         } catch (cause: IllegalStateException) {
             Log.d(TAG, "uid should not be null")
             Log.d(TAG, cause.toString())
@@ -78,6 +89,7 @@ class FirestoreService {
             Log.d(TAG, "error creating user file:")
             Log.d(TAG, cause.toString())
         }
+        return User()
     }
 
     private suspend inline fun <reified T> getCollectionQuery(
