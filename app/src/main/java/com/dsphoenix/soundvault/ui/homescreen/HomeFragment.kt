@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dsphoenix.soundvault.R
 import com.dsphoenix.soundvault.data.model.Track
 import com.dsphoenix.soundvault.databinding.HomeScreenFragmentBinding
+import com.dsphoenix.soundvault.utils.collectLatestLifeCycleFlow
 import com.dsphoenix.soundvault.utils.viewbinding.ViewBindingFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -22,7 +23,6 @@ class HomeFragment : ViewBindingFragment<HomeScreenFragmentBinding>(HomeScreenFr
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setupView()
-        viewModel.fetchTracks()
     }
 
     private fun setupView() {
@@ -38,7 +38,7 @@ class HomeFragment : ViewBindingFragment<HomeScreenFragmentBinding>(HomeScreenFr
             )
             rvTracks.addItemDecoration(decorator)
 
-            viewModel.tracks.observe(viewLifecycleOwner) { tracks ->
+            collectLatestLifeCycleFlow(viewModel.tracks) { tracks ->
                 (rvTracks.adapter as TracksAdapter).apply {
                     setData(tracks)
                     onItemClickListener = onTrackClickListener
@@ -47,14 +47,15 @@ class HomeFragment : ViewBindingFragment<HomeScreenFragmentBinding>(HomeScreenFr
             }
 
             subButton.setOnClickListener { viewModel.toggleSubscription() }
-            viewModel.user.observe(viewLifecycleOwner) { user ->
+            collectLatestLifeCycleFlow(viewModel.user) { user ->
                 subButton.text =
                     if (user.hasSubscription == true) "Unsubscribe" else "Subscribe"
             }
 
             swipeRefreshLayout.setOnRefreshListener {
-                viewModel.refreshTracks()
-                swipeRefreshLayout.isRefreshing = false
+                viewModel.refreshTracks {
+                    swipeRefreshLayout.isRefreshing = false
+                }
             }
         }
     }

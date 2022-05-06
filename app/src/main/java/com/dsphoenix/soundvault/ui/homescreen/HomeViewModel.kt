@@ -3,7 +3,9 @@ package com.dsphoenix.soundvault.ui.homescreen
 import androidx.lifecycle.*
 import com.dsphoenix.soundvault.data.AudioRepository
 import com.dsphoenix.soundvault.data.UserRepository
+import com.dsphoenix.soundvault.data.model.Track
 import com.dsphoenix.soundvault.data.model.User
+import com.dsphoenix.soundvault.utils.collectFlow
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
@@ -16,41 +18,41 @@ class HomeViewModel @Inject constructor(
     private val userRepository: UserRepository,
 ) : ViewModel() {
 
-    private val uid: MutableStateFlow<String> = MutableStateFlow(FirebaseAuth.getInstance().currentUser?.uid.toString())
+    private val _uid = MutableStateFlow(FirebaseAuth.getInstance().currentUser?.uid.toString())
 
-    private val _user = uid.flatMapConcat { flow { emit(userRepository.getUser(it)) } }
-    val user: LiveData<User> = _user.asLiveData()
+    private val _user = MutableStateFlow(User())
+    val user = _user.asStateFlow()
 
-    var tracks = audioRepository.tracks.asLiveData()
+    private val _tracks = MutableStateFlow<List<Track>>(emptyList())
+    val tracks = _tracks.asStateFlow()
 
     init {
-        viewModelScope.launch {
-            _user.collect {
-                AudioRepository.isSubscriptionEnabled = it.hasSubscription ?: false
-                audioRepository.fetchTracks()
+        collectFlow(_uid) { id ->
+            _user.value = userRepository.getUser(id)
+        }
+
+        collectFlow(_user) { user ->
+            AudioRepository.isSubscriptionEnabled = user.hasSubscription ?: false
+            audioRepository.getTracks().collectLatest { tracks ->
+                _tracks.value = tracks
             }
         }
     }
 
     fun toggleSubscription() {
         viewModelScope.launch {
-            val updatedUser = user.value?.copy(hasSubscription = !user.value?.hasSubscription!!)
-            if (updatedUser != null) {
-                userRepository.updateUser(updatedUser)
+            val updatedUser = _user.value.copy(hasSubscription = !_user.value.hasSubscription!!)
+            userRepository.updateUser(updatedUser)
+            _user.value = updatedUser
+        }
+    }
+
+    fun refreshTracks(onCompletionListener: (() -> Unit)? = null) {
+        viewModelScope.launch {
+            audioRepository.getTracks(skipCache = true).collectLatest { tracks ->
+                _tracks.value = tracks
+                onCompletionListener?.invoke()
             }
-            audioRepository.refreshTracks()
-        }
-    }
-
-    fun refreshTracks() {
-        viewModelScope.launch {
-            audioRepository.refreshTracks()
-        }
-    }
-
-    fun fetchTracks() {
-        viewModelScope.launch {
-            audioRepository.fetchTracks()
         }
     }
 }
