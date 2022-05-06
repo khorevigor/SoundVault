@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide
 import com.dsphoenix.soundvault.R
 import com.dsphoenix.soundvault.databinding.UserProfileFragmentBinding
 import com.dsphoenix.soundvault.ui.homescreen.TracksAdapter
+import com.dsphoenix.soundvault.utils.collectLatestLifeCycleFlow
 import com.dsphoenix.soundvault.utils.viewbinding.ViewBindingFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -48,11 +49,11 @@ class UserProfileFragment: ViewBindingFragment<UserProfileFragmentBinding>(UserP
                 viewModel.setUserName(text.toString())
             }
 
-            viewModel.tracks.observe(viewLifecycleOwner) { tracks ->
+            collectLatestLifeCycleFlow(viewModel.tracks) { tracks ->
                 (rvTracks.adapter as TracksAdapter).setData(tracks)
             }
 
-            viewModel.user.observe(viewLifecycleOwner) { user ->
+            collectLatestLifeCycleFlow(viewModel.user) { user ->
                 if (user.name != etUserName.text.toString()) {
                     etUserName.setText(user.name ?: "Placeholder name")
                 }

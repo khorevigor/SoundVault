@@ -4,7 +4,9 @@ import android.net.Uri
 import androidx.lifecycle.*
 import com.dsphoenix.soundvault.data.AudioRepository
 import com.dsphoenix.soundvault.data.UserRepository
+import com.dsphoenix.soundvault.data.model.Track
 import com.dsphoenix.soundvault.data.model.User
+import com.dsphoenix.soundvault.utils.collectFlow
 import com.dsphoenix.soundvault.utils.constants.DbConstants
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,44 +20,46 @@ class UserProfileViewModel @Inject constructor(
     private val userRepository: UserRepository,
 ) : ViewModel() {
 
-    private val uid: MutableStateFlow<String> =
+    private val _uid: MutableStateFlow<String> =
         MutableStateFlow(FirebaseAuth.getInstance().currentUser?.uid.toString())
 
-    private val _user = MutableLiveData<User>()
-    val user: LiveData<User> = _user
+    private val _user = MutableStateFlow(User())
+    val user = _user.asStateFlow()
 
     private var isUserChanged = false
 
-    val tracks = audioRepository.tracks.asLiveData()
+    private val _tracks = MutableStateFlow<List<Track>>(emptyList())
+    val tracks = _tracks.asStateFlow()
 
     init {
-        viewModelScope.launch {
-            uid.collect {
-                val user = userRepository.getUser(it)
-                _user.postValue(user)
-                AudioRepository.isSubscriptionEnabled = user.hasSubscription ?: false
-                audioRepository.fetchTracks(mapOf(DbConstants.TRACK_UPLOADER_ID to it))
-            }
+        collectFlow(_uid) { id ->
+            _user.value = userRepository.getUser(id)
+        }
+
+        collectFlow(_user) { user ->
+            AudioRepository.isSubscriptionEnabled = user.hasSubscription ?: false
+            audioRepository.getTracks(mapOf(DbConstants.TRACK_UPLOADER_ID to user.uid.toString()))
+                .collectLatest { tracks ->
+                    _tracks.value = tracks
+                }
         }
     }
 
     fun setUserName(name: String) {
-        _user.value = _user.value?.copy(name = name)
+        _user.value = _user.value.copy(name = name)
         isUserChanged = true
     }
 
     fun setAvatarUri(uri: Uri) {
-        _user.value = _user.value?.copy(avatarUri = uri)
+        _user.value = _user.value.copy(avatarUri = uri)
         isUserChanged = true
     }
 
     fun saveChanges() {
         if (isUserChanged) {
-            _user.value?.let {
-                viewModelScope.launch {
-                    isUserChanged = false
-                    userRepository.updateUser(it)
-                }
+            viewModelScope.launch {
+                isUserChanged = false
+                userRepository.updateUser(_user.value)
             }
         }
     }

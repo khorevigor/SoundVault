@@ -21,6 +21,7 @@ import com.dsphoenix.soundvault.ui.trackdetails.TrackDetailsFragment
 import com.dsphoenix.soundvault.ui.uploadscreen.CreateTrackFragment
 import com.dsphoenix.soundvault.ui.userscreen.UserProfileFragment
 import com.dsphoenix.soundvault.utils.TAG
+import com.dsphoenix.soundvault.utils.collectLatestLifeCycleFlow
 import com.dsphoenix.soundvault.utils.mediaplayer.MediaPlayer
 import com.dsphoenix.soundvault.utils.navigation.NavigationController
 import com.firebase.ui.auth.AuthUI
@@ -108,10 +109,8 @@ class MainActivity : AppCompatActivity() {
             }
 
             mediaPlayer.onCompletionCallback = ::hidePlayerLayout
-            lifecycleScope.launch {
-                repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    audioRepository.tracks.collect { mediaPlayer.setTracksQueue(it) }
-                }
+            collectLatestLifeCycleFlow(audioRepository.getTracks()) { tracks ->
+                mediaPlayer.setTracksQueue(tracks)
             }
 
             layoutMediaPlayer.setOnClickListener { navigateToTrackDetails(mediaPlayer.currentTrack.value?.id as String) }
