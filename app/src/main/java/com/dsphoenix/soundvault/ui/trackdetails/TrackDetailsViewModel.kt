@@ -13,9 +13,7 @@ class TrackDetailsViewModel @Inject constructor(
     private val audioRepository: AudioRepository
 ) : ViewModel() {
     private val _trackId = MutableStateFlow("")
-    private val _track = _trackId.flatMapLatest { audioRepository.getTrack(it) }
-
-    val track = _track.asLiveData()
+    val track = _trackId.flatMapLatest { audioRepository.getTrack(it) }
 
     fun setTrackId(id: String) {
         _trackId.value = id

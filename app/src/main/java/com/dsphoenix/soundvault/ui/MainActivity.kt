@@ -86,7 +86,7 @@ class MainActivity : AppCompatActivity() {
         binding.apply {
             tvToolbarText.text = "Greetings"
 
-            mediaPlayer.currentTrack.observe(this@MainActivity) { track ->
+            collectLatestLifeCycleFlow(mediaPlayer.currentTrack) { track ->
                 Glide.with(this@MainActivity)
                     .load(track.imagePath)
                     .placeholder(R.drawable.ic_music_note)
@@ -96,11 +96,11 @@ class MainActivity : AppCompatActivity() {
                     getString(R.string.track_viewholder_title).format(track.authorName, track.name)
             }
 
-            mediaPlayer.isPlaying.observe(this@MainActivity) { playing ->
+            collectLatestLifeCycleFlow(mediaPlayer.isPlaying) { playing ->
                 if (playing != null) {
                     togglePlayButton(playing)
                     if (playing && !isTrackDetailsScreenVisible()) {
-                        mediaPlayer.trackProgress.observe(this@MainActivity) {
+                        collectLatestLifeCycleFlow(mediaPlayer.trackProgress) {
                             progressBar.progress = if (it >= 0) it else 0
                         }
                         layoutMediaPlayer.visibility = View.VISIBLE
@@ -113,7 +113,7 @@ class MainActivity : AppCompatActivity() {
                 mediaPlayer.setTracksQueue(tracks)
             }
 
-            layoutMediaPlayer.setOnClickListener { navigateToTrackDetails(mediaPlayer.currentTrack.value?.id as String) }
+            layoutMediaPlayer.setOnClickListener { navigateToTrackDetails(mediaPlayer.currentTrack.value.id as String) }
         }
     }
 
@@ -153,7 +153,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun hidePlayerLayout() {
         binding.layoutMediaPlayer.visibility = View.GONE
-        mediaPlayer.trackProgress.removeObservers(this)
     }
 
     private fun showPlayerLayout() {

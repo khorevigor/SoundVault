@@ -9,6 +9,7 @@ import androidx.fragment.app.activityViewModels
 import com.dsphoenix.soundvault.R
 import com.dsphoenix.soundvault.databinding.TrackDetailsFragmentBinding
 import com.dsphoenix.soundvault.utils.TAG
+import com.dsphoenix.soundvault.utils.collectLatestLifeCycleFlow
 import com.dsphoenix.soundvault.utils.mediaplayer.MediaPlayer
 import com.dsphoenix.soundvault.utils.viewbinding.ViewBindingFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -33,26 +34,26 @@ class TrackDetailsFragment :
     private fun setupView() {
         Log.d(TAG, "${binding.progressBar.min}, ${binding.progressBar.max}")
         binding.apply {
-            mediaPlayer.currentTrack.observe(viewLifecycleOwner) { track ->
+            collectLatestLifeCycleFlow(mediaPlayer.currentTrack) { track ->
                 tvAuthorName.text = track.authorName
                 tvTrackName.text = track.name
                 tvGenres.text = track.genres?.joinToString(", ") { it }
                 track.imagePath?.let { ivTrackCover.loadImage(requireContext(), it) }
             }
 
-            mediaPlayer.trackDuration.observe(viewLifecycleOwner) {
+            collectLatestLifeCycleFlow(mediaPlayer.trackDuration) {
                 tvDurationTotal.text = it.toFormattedTime()
             }
 
-            mediaPlayer.trackCurrentPosition.observe(viewLifecycleOwner) {
+            collectLatestLifeCycleFlow(mediaPlayer.trackCurrentPosition) {
                 tvDurationCurrent.text = it.toFormattedTime()
             }
 
-            mediaPlayer.trackProgress.observe(viewLifecycleOwner) {
+            collectLatestLifeCycleFlow(mediaPlayer.trackProgress) {
                 progressBar.progress = it
             }
 
-            mediaPlayer.isShuffled.observe(viewLifecycleOwner) {
+            collectLatestLifeCycleFlow(mediaPlayer.isShuffled) {
                 ibShuffleButton.backgroundTintList = ColorStateList.valueOf(
                     ContextCompat.getColor(
                         requireContext(),
@@ -61,7 +62,7 @@ class TrackDetailsFragment :
                 )
             }
 
-            mediaPlayer.isLooping.observe(viewLifecycleOwner) {
+            collectLatestLifeCycleFlow(mediaPlayer.isLooping) {
                 ibLoopingButton.backgroundTintList = ColorStateList.valueOf(
                     ContextCompat.getColor(
                         requireContext(),
@@ -83,7 +84,7 @@ class TrackDetailsFragment :
             backButton.setOnClickListener { navigateBackButtonClickListener?.invoke() }
         }
 
-        mediaPlayer.isPlaying.observe(viewLifecycleOwner) {
+        collectLatestLifeCycleFlow(mediaPlayer.isPlaying) {
             if (it != null) {
                 togglePlayButton(it)
             }
@@ -91,7 +92,9 @@ class TrackDetailsFragment :
     }
 
     private fun playAudio() {
-        viewModel.track.value?.let { mediaPlayer.playTrack(it) }
+        collectLatestLifeCycleFlow(viewModel.track) {
+            mediaPlayer.playTrack(it)
+        }
     }
 
     private fun togglePlayButton(isPlaying: Boolean) {
