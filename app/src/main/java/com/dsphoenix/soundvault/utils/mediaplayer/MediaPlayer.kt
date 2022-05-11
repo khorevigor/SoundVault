@@ -2,29 +2,27 @@ package com.dsphoenix.soundvault.utils.mediaplayer
 
 import android.media.MediaPlayer
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.map
 import com.dsphoenix.soundvault.data.model.Track
 import com.dsphoenix.soundvault.utils.TAG
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.isActive
 import java.util.*
 import kotlin.math.roundToInt
 
 class MediaPlayer {
     private val _isPlaying = MutableStateFlow<Boolean?>(null)
-    val isPlaying = _isPlaying.asLiveData()
+    val isPlaying = _isPlaying.asStateFlow()
 
     private val _isShuffled = MutableStateFlow(false)
-    val isShuffled = _isShuffled.asLiveData()
+    val isShuffled = _isShuffled.asStateFlow()
 
     private val _isLooping = MutableStateFlow(false)
-    val isLooping = _isLooping.asLiveData()
+    val isLooping = _isLooping.asStateFlow()
 
     private val _trackCurrentPosition = flow {
         while (currentCoroutineContext().isActive) {
@@ -35,12 +33,12 @@ class MediaPlayer {
         }
     }
 
-    val trackCurrentPosition = _trackCurrentPosition.asLiveData()
+    val trackCurrentPosition = _trackCurrentPosition
 
-    private val _trackDuration = MutableLiveData<Int>()
-    val trackDuration: LiveData<Int> = _trackDuration
+    private val _trackDuration = MutableStateFlow(0)
+    val trackDuration = _trackDuration.asStateFlow()
 
-    val trackProgress = _trackCurrentPosition.asLiveData().map {
+    val trackProgress = _trackCurrentPosition.mapLatest {
         ((it.toDouble() / mediaPlayer.duration) * 100).roundToInt()
     }
 
@@ -50,8 +48,8 @@ class MediaPlayer {
 
     private var currentIndex: Int = -1
 
-    private val _currentTrack = MutableLiveData<Track>()
-    val currentTrack: LiveData<Track> = _currentTrack
+    private val _currentTrack = MutableStateFlow(Track())
+    val currentTrack = _currentTrack.asStateFlow()
 
     var onCompletionCallback: (() -> Unit)? = null
 
