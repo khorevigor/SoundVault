@@ -1,41 +1,43 @@
 package com.dsphoenix.soundvault.ui.uploadscreen.forms.distributionplan
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
 import com.dsphoenix.soundvault.utils.ValidatedForm
 import com.dsphoenix.soundvault.utils.constants.DistributionBundle
 import com.dsphoenix.soundvault.utils.constants.DistributionPlan
+import kotlinx.coroutines.flow.*
 
-class DistributionPlanForm: ValidatedForm {
-    private val _distributionPlan = MutableLiveData<DistributionPlan>()
-    val distributionPlan: LiveData<DistributionPlan> = _distributionPlan
+class DistributionPlanForm : ValidatedForm {
+
+    private val _distributionPlan = MutableStateFlow<DistributionPlan?>(null)
+    val distributionPlan = _distributionPlan.asStateFlow()
 
     private val bundles = mutableSetOf<DistributionBundle>()
-    private val _distributionBundles = MutableLiveData<Set<DistributionBundle>>()
-    val distributionBundle: LiveData<Set<DistributionBundle>> = _distributionBundles
+    private val _distributionBundles = MutableStateFlow(setOf<DistributionBundle>())
+    val distributionBundles = _distributionBundles.asStateFlow()
 
-    private val _singlePrice = MutableLiveData<String>()
-    val singlePrice: LiveData<String> = _singlePrice
+    private val _singlePrice = MutableStateFlow("")
+    val singlePrice = _singlePrice.asStateFlow()
 
-    override val isValid = MediatorLiveData<Boolean>()
+    override val isValid: Flow<Boolean>
 
     init {
-        isValid.apply {
-            addSource(_distributionPlan) { isValid.value = validate() }
-            addSource(_distributionBundles) { isValid.value = validate() }
-            addSource(_singlePrice) { isValid.value = validate() }
+        isValid = combine(
+            _distributionPlan,
+            _distributionBundles,
+            _singlePrice
+        ) { _, _, _ ->
+            validateFlows()
         }
+
     }
 
-    private fun validate(): Boolean {
+    private fun validateFlows(): Boolean {
         val isDistributionPlanValid = _distributionPlan.value != null
         if (_distributionPlan.value != DistributionPlan.ONE_TIME_PURCHASE) return isDistributionPlanValid
 
         val isBundleValid = bundles.isNotEmpty()
         if (!bundles.contains(DistributionBundle.SINGLE)) return isDistributionPlanValid && isBundleValid
 
-        val isPriceValid = !_singlePrice.value.isNullOrEmpty()
+        val isPriceValid = _singlePrice.value != "" && _singlePrice.value.toInt() > 0
 
         return isDistributionPlanValid && isBundleValid && isPriceValid
     }

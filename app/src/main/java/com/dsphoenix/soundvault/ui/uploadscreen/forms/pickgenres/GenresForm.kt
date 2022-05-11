@@ -1,17 +1,17 @@
 package com.dsphoenix.soundvault.ui.uploadscreen.forms.pickgenres
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import com.dsphoenix.soundvault.utils.ValidatedForm
+import kotlinx.coroutines.flow.*
 
 class GenresForm: ValidatedForm {
-    private val genreToColor = mutableMapOf<String, Int>()
-    private val _genres = MutableLiveData<Map<String, Int>>()
-    val genres: LiveData<Map<String, Int>> = _genres
 
-    private val _isValid = Transformations.map(_genres) { it.isNotEmpty() }
-    override val isValid: LiveData<Boolean> = _isValid
+    private val genreToColor = mutableMapOf<String, Int>()
+    private val _genres = MutableStateFlow(mapOf<String, Int>())
+    val genres = _genres.asStateFlow()
+
+    override val isValid: Flow<Boolean> = _genres.mapLatest {
+        it.isNotEmpty()
+    }
 
     fun addGenre(genre: String, color: Int) {
         genreToColor[genre] = color

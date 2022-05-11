@@ -1,29 +1,25 @@
 package com.dsphoenix.soundvault.ui.uploadscreen.forms.pickfile
 
 import android.net.Uri
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import com.dsphoenix.soundvault.utils.ValidatedForm
-import java.io.File
+import kotlinx.coroutines.flow.*
 
 class FileForm : ValidatedForm {
-    private val _uri = MutableLiveData<Uri>()
-    val uri: LiveData<Uri> = _uri
+    private val _uri = MutableStateFlow<Uri?>(null)
+    val uri = _uri.asStateFlow()
 
-    private val _filename = Transformations.map(_uri) { uri -> getFileName(uri) } as MutableLiveData<String>
-    val filename: LiveData<String> = _filename
+    private val _filename = MutableStateFlow("")
+    val filename = _filename.asStateFlow()
 
-    private val _authorName = MutableLiveData<String>()
-    val authorName: LiveData<String> = _authorName
+    private val _authorName = MutableStateFlow("")
+    val authorName = _authorName.asStateFlow()
 
-    override val isValid = MediatorLiveData<Boolean>()
-
-    init {
-        isValid.addSource(_uri) { isValid.value = validate() }
-        isValid.addSource(_filename) { isValid.value = validate() }
-        isValid.addSource(_authorName) { isValid.value = validate() }
+    override val isValid: Flow<Boolean> = combine(
+        _uri,
+        _filename,
+        _authorName
+    ) { _, _, _ ->
+        validate()
     }
 
     fun setFileName(filename: String) {
@@ -38,7 +34,6 @@ class FileForm : ValidatedForm {
         _authorName.value = authorName
     }
 
-    private fun validate() = _uri.value != null && !_filename.value.isNullOrEmpty() && !_authorName.value.isNullOrEmpty()
-
-    private fun getFileName(uri: Uri) = File(uri.path!!).nameWithoutExtension
+    private fun validate() =
+        _uri.value != null && _filename.value.isNotEmpty() && _authorName.value.isNotEmpty()
 }

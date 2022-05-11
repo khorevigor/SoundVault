@@ -2,7 +2,6 @@ package com.dsphoenix.soundvault.ui.uploadscreen.forms.pickfile
 
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.res.ResourcesCompat.getDrawable
@@ -11,9 +10,10 @@ import androidx.fragment.app.activityViewModels
 import com.dsphoenix.soundvault.R
 import com.dsphoenix.soundvault.databinding.PickFileFragmentBinding
 import com.dsphoenix.soundvault.ui.uploadscreen.CreateTrackViewModel
-import com.dsphoenix.soundvault.utils.TAG
+import com.dsphoenix.soundvault.utils.collectLatestLifeCycleFlow
 import com.dsphoenix.soundvault.utils.viewbinding.ViewBindingFragment
 import dagger.hilt.android.AndroidEntryPoint
+import java.io.File
 
 @AndroidEntryPoint
 class PickFileFragment :
@@ -36,19 +36,27 @@ class PickFileFragment :
     private fun setupView() {
         binding.apply {
             viewModel.fileForm.apply {
-                filename.observe(viewLifecycleOwner) { text ->
-                    if (text != etFileName.text.toString())
-                        etFileName.setText(text)
+                collectLatestLifeCycleFlow(filename) { filename ->
+                    if (filename != etFileName.text.toString()) {
+                        etFileName.setText(filename)
+                    }
                 }
-                authorName.observe(viewLifecycleOwner) { text ->
-                    if (text != etAuthorName.text.toString())
-                        etAuthorName.setText(text)
+
+                collectLatestLifeCycleFlow(authorName) { author ->
+                    if (author != etAuthorName.text.toString()) {
+                        etAuthorName.setText(author)
+                    }
+                }
+
+                collectLatestLifeCycleFlow(uri) {
+                    if (it != null) {
+                        viewModel.fileForm.setFileName(getFileName(it))
+                        showFilePickedIcon()
+                    }
                 }
 
                 btnPickFile.setOnClickListener { onPickFileClick() }
-                if (!filename.value.isNullOrEmpty()) {
-                    showFilePickedIcon()
-                }
+
                 etFileName.doAfterTextChanged { text ->
                     setFileName(text.toString())
                 }
@@ -72,4 +80,6 @@ class PickFileFragment :
         binding.btnPickFile.background = getDrawable(resources, R.drawable.ic_folder, null)
         binding.ivDoneIcon.visibility = View.VISIBLE
     }
+
+    private fun getFileName(uri: Uri) = File(uri.path!!).nameWithoutExtension
 }

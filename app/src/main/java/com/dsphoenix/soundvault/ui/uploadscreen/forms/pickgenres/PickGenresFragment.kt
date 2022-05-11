@@ -30,7 +30,7 @@ class PickGenresFragment :
         binding.apply {
             autocompleteview.setAdapter(adapter)
             btnAdd.setOnClickListener { onAddClicked() }
-            viewModel.genresForm.genres.value?.map {
+            viewModel.genresForm.genres.value.map {
                 val (text, color) = it
                 addChip(text, color)
             }
