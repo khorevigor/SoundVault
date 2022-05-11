@@ -8,6 +8,7 @@ import com.dsphoenix.soundvault.ui.uploadscreen.forms.pickfile.FileForm
 import com.dsphoenix.soundvault.ui.uploadscreen.forms.pickgenres.GenresForm
 import com.dsphoenix.soundvault.ui.uploadscreen.forms.pickimage.ImageForm
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,14 +21,14 @@ class CreateTrackViewModel @Inject constructor(
     val genresForm = GenresForm()
     val distributionPlanForm = DistributionPlanForm()
 
-    private val forms = listOf(fileForm, imageForm, genresForm, distributionPlanForm)
-
-    val isValid = MediatorLiveData<Boolean>()
-
-    init {
-        forms.map {
-            isValid.addSource(it.isValid) { isValid.value = validate() }
-        }
+    val isValid = combine(
+        fileForm.isValid,
+        imageForm.isValid,
+        genresForm.isValid,
+        distributionPlanForm.isValid
+    ) {
+        fileValid, imageValid, genresValid, planValid ->
+        fileValid && imageValid && genresValid && planValid
     }
 
     fun uploadTrack() {
@@ -36,9 +37,9 @@ class CreateTrackViewModel @Inject constructor(
             authorName = fileForm.authorName.value,
             uri = fileForm.uri.value,
             imageUri = imageForm.uri.value,
-            genres = genresForm.genres.value?.keys?.toList(),
+            genres = genresForm.genres.value.keys.toList(),
             distributionPlan = distributionPlanForm.distributionPlan.value,
-            distributionBundle = distributionPlanForm.distributionBundle.value?.toList(),
+            distributionBundle = distributionPlanForm.distributionBundles.value.toList(),
             singlePrice = distributionPlanForm.singlePrice.value
         )
 
@@ -46,6 +47,4 @@ class CreateTrackViewModel @Inject constructor(
             audioRepository.uploadTrack(track)
         }
     }
-
-    private fun validate() = forms.all { it.isValid.value == true }
 }

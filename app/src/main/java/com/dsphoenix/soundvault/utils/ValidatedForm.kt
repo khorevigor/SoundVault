@@ -1,7 +1,7 @@
 package com.dsphoenix.soundvault.utils
 
-import androidx.lifecycle.LiveData
+import kotlinx.coroutines.flow.Flow
 
 interface ValidatedForm {
-    val isValid: LiveData<Boolean>
+    val isValid: Flow<Boolean>
 }

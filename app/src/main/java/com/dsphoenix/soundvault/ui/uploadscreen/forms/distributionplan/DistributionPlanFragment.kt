@@ -9,9 +9,11 @@ import com.dsphoenix.soundvault.R
 import com.dsphoenix.soundvault.databinding.DistributionPlanFragmentBinding
 import com.dsphoenix.soundvault.ui.uploadscreen.CreateTrackViewModel
 import com.dsphoenix.soundvault.utils.TAG
+import com.dsphoenix.soundvault.utils.collectLatestLifeCycleFlow
 import com.dsphoenix.soundvault.utils.constants.DistributionBundle
 import com.dsphoenix.soundvault.utils.constants.DistributionPlan
 import com.dsphoenix.soundvault.utils.viewbinding.ViewBindingFragment
+import java.lang.IllegalArgumentException
 
 class DistributionPlanFragment :
     ViewBindingFragment<DistributionPlanFragmentBinding>(DistributionPlanFragmentBinding::inflate) {
@@ -26,17 +28,18 @@ class DistributionPlanFragment :
         binding.apply {
 
             viewModel.distributionPlanForm.apply {
-                distributionPlan.observe(viewLifecycleOwner) { plan ->
-                    rgDistributionPlan.check(plan.getRadioButtonId())
+                collectLatestLifeCycleFlow(distributionPlan) { plan ->
+                    plan?.let { rgDistributionPlan.check(it.getRadioButtonId()) }
                 }
 
-                distributionBundle.observe(viewLifecycleOwner) { bundles ->
+                collectLatestLifeCycleFlow(distributionBundles) { bundles ->
                     bundles.map { it.getSwitch().isChecked = true }
                 }
 
-                singlePrice.observe(viewLifecycleOwner) { text ->
-                    if (text != etSinglePrice.text.toString())
-                        etSinglePrice.setText(text)
+                collectLatestLifeCycleFlow(singlePrice) { price ->
+                    if (price != etSinglePrice.text.toString()) {
+                        etSinglePrice.setText(price)
+                    }
                 }
 
                 rgDistributionPlan.setOnCheckedChangeListener { _, optionId ->

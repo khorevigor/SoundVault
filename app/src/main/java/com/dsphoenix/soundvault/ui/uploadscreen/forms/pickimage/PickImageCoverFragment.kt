@@ -2,13 +2,12 @@ package com.dsphoenix.soundvault.ui.uploadscreen.forms.pickimage
 
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
 import com.dsphoenix.soundvault.databinding.PickImageCoverFragmentBinding
 import com.dsphoenix.soundvault.ui.uploadscreen.CreateTrackViewModel
-import com.dsphoenix.soundvault.utils.TAG
+import com.dsphoenix.soundvault.utils.collectLatestLifeCycleFlow
 import com.dsphoenix.soundvault.utils.viewbinding.ViewBindingFragment
 
 class PickImageCoverFragment :
@@ -30,9 +29,11 @@ class PickImageCoverFragment :
 
     private fun setupView() {
         binding.btnPickFile.setOnClickListener { onPickImageClick() }
-        viewModel.imageForm.uri.observe(viewLifecycleOwner) {
-            binding.btnPickFile.setImageURI(it)
-            showImagePickedIcon()
+        collectLatestLifeCycleFlow(viewModel.imageForm.uri) { uri ->
+            uri?.let {
+                showImagePickedIcon()
+                binding.btnPickFile.setImageURI(uri)
+            }
         }
     }
 

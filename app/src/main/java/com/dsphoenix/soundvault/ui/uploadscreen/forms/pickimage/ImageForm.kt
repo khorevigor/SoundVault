@@ -2,21 +2,20 @@ package com.dsphoenix.soundvault.ui.uploadscreen.forms.pickimage
 
 import android.net.Uri
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import com.dsphoenix.soundvault.utils.ValidatedForm
 import com.dsphoenix.soundvault.utils.TAG
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.mapLatest
 
 class ImageForm: ValidatedForm {
-    private val _uri = MutableLiveData<Uri>()
-    val uri: LiveData<Uri> = _uri
 
-    private val _isValid = Transformations.map(_uri) { it != null }
-    override val isValid: LiveData<Boolean> = _isValid
+    private val _uri = MutableStateFlow<Uri?>(null)
+    val uri = _uri.asStateFlow()
+
+    override val isValid = _uri.mapLatest { it != null }
 
     fun setUri(uri: Uri) {
-        Log.d(TAG, "Uri set $uri")
         _uri.value = uri
     }
 }

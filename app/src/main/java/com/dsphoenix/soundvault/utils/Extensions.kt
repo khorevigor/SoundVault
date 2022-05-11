@@ -1,8 +1,6 @@
 package com.dsphoenix.soundvault.utils
 
-import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.lifecycleScope
@@ -28,13 +26,13 @@ fun <T> ViewModel.collectFlow(flow: Flow<T>, collector: suspend (T) -> Unit) {
 }
 
 fun <T> Fragment.collectLatestLifeCycleFlow(flow: Flow<T>, collector: suspend (T) -> Unit) {
-    lifecycleScope.launch{
+    lifecycleScope.launchWhenStarted {
         flow.collectLatest(collector)
     }
 }
 
 fun <T> AppCompatActivity.collectLatestLifeCycleFlow(flow: Flow<T>, collector: suspend (T) -> Unit) {
-    lifecycleScope.launch{
+    lifecycleScope.launchWhenStarted {
         flow.collectLatest(collector)
     }
 }

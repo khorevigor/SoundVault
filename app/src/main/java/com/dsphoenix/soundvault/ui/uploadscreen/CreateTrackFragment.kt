@@ -9,6 +9,7 @@ import com.dsphoenix.soundvault.ui.uploadscreen.forms.distributionplan.Distribut
 import com.dsphoenix.soundvault.ui.uploadscreen.forms.pickfile.PickFileFragment
 import com.dsphoenix.soundvault.ui.uploadscreen.forms.pickgenres.PickGenresFragment
 import com.dsphoenix.soundvault.ui.uploadscreen.forms.pickimage.PickImageCoverFragment
+import com.dsphoenix.soundvault.utils.collectLatestLifeCycleFlow
 import com.dsphoenix.soundvault.utils.navigation.NavigationController
 import com.dsphoenix.soundvault.utils.viewbinding.ViewBindingFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -50,7 +51,7 @@ class CreateTrackFragment: ViewBindingFragment<CreateTrackFragmentBinding>(Creat
             }
         }
         binding.btnUpload.setOnClickListener { onUploadButtonClick() }
-        viewModel.isValid.observe(viewLifecycleOwner) { valid ->
+        collectLatestLifeCycleFlow(viewModel.isValid) { valid ->
             binding.btnUpload.visibility = if (valid) View.VISIBLE else View.GONE
         }
     }
